@@ -1,0 +1,28 @@
+﻿services:
+  raceapi:
+    image: raceapi
+    build:
+      context: .
+      dockerfile: RaceApi/Dockerfile.debug
+    env_file:
+      - .env
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:8081;http://+:8080
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=${ASPNETCORE_Kestrel__Certificates__Default__Password}
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/RaceApi.pfx
+      - CORS_ORIGINS=${CORS_ORIGINS}
+    volumes:
+      - ~/.aspnet/https:/https
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    depends_on:
+      - db
+  db:
+    image: "mcr.microsoft.com/mssql/server:2019-CU18-ubuntu-20.04"
+    environment:
+      - MSSQL_SA_PASSWORD=${MSSQL_PASSWORD}
+      - ACCEPT_EULA=Y
+    ports:
+      - "${MSSQL_PORT}:1433"
