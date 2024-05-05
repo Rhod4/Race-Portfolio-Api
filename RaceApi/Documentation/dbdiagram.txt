@@ -1,0 +1,17 @@
+Table race{
+  Id guid [primary key]
+  Name string
+  CreatedOn datetime
+  CreatedBy guid
+  UpdatedOn datetime
+  UpdatedBy guid
+  RaceDate datetime
+  Participants profile
+  Marshals profile
+}
+Table profile{
+  Id guid [primary key]
+  Name string
+}
+Ref: race.Participants > profile.Id
+

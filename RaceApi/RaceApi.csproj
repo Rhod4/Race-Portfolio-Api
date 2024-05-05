@@ -1,0 +1,39 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <InvariantGlobalization>false</InvariantGlobalization>
+        <UserSecretsId>aspnet-RaceApi-4082B57B-19FE-4FCA-BF94-E0BF36AC86B1</UserSecretsId>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.0" NoWarn="NU1605"/>
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="8.0.0" NoWarn="NU1605"/>
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.0"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.0-preview.3.24172.4" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0-preview.3.24172.4">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.0-preview.3.24172.4" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.0-preview.3.24172.4" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.0-preview.3.24172.4">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.Identity.Web" Version="2.15.2"/>
+        <PackageReference Include="Microsoft.Identity.Web.DownstreamApi" Version="2.15.2"/>
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0"/>
+        <PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="..\.dockerignore">
+        <Link>.dockerignore</Link>
+      </Content>
+    </ItemGroup>
+
+</Project>

@@ -1,0 +1,16 @@
+# Use the .NET SDK image instead of Runtime image for development, see
+# https://learn.microsoft.com/en-us/dotnet/architecture/microservices/net-core-net-framework-containers/official-net-docker-images#during-development-and-build
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS development
+
+WORKDIR /app
+
+# Copy the source code into the container
+COPY . .
+
+# Expose the necessary ports
+EXPOSE 8080
+EXPOSE 8081
+
+ENV ASPNETCORE_ENVIRONMENT=Development
+
+ENTRYPOINT ["dotnet", "run"]
