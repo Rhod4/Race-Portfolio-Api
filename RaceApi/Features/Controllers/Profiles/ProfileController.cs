@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using RaceApi.Persistence.Models;
 using RaceApi.Repositories.Profiles;
+using RaceApi.Repositories.Profiles.Interfaces;
 
 namespace RaceApi.Features.Controllers.Profiles;
 
@@ -12,19 +13,22 @@ namespace RaceApi.Features.Controllers.Profiles;
 [ApiController]
 public class ProfileController : ControllerBase
 {
-    private readonly ProfileRepository _profileRepository;
+    private readonly IProfileRepository _profileRepository;
 
-    public ProfileController(ProfileRepository profileRepository)
+    public ProfileController(IProfileRepository profileRepository)
     {
         _profileRepository = profileRepository;
     }
 
-    [HttpGet("Get")]
+    [HttpGet("test")]
     [AllowAnonymous]
     public async Task<ActionResult<Profile>> Get()
     {
         var profile = await _profileRepository.GetProfile();
         
-        return Ok(profile);
+        return Ok(new
+        {
+            Success =  profile
+        });
     }
 }

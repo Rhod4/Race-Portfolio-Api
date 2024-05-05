@@ -16,16 +16,8 @@ public class ProfileRepository: IProfileRepository
 
     public async Task<Profile> GetProfile()
     {
-         var t = await _raceProjectContext.Profile.SingleAsync(p => p.Email == "James@GSnail.com");
-        
-        var profile = new Profile
-        {
-            Id = Guid.NewGuid(),
-            Firstname = "James",
-            Lastname = "Fletcher",
-            Email = "JamesFletch@GSnail.com"
-        };
-
+         var profile = await _raceProjectContext.Profile.SingleAsync(p => p.Email == "James@GSnail.com");
+         
         return profile;
     }
 }

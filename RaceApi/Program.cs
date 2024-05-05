@@ -6,6 +6,8 @@ using Microsoft.Identity.Web;
 using Microsoft.Identity.Abstractions;
 using Microsoft.Identity.Web.Resource;
 using RaceApi.Persistence;
+using RaceApi.Repositories.Profiles;
+using RaceApi.Repositories.Profiles.Interfaces;
 using RaceApi.Seeders;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,6 +19,8 @@ builder.Services.AddAuthorization();
 
 builder.Services.AddDbContext<RaceProjectContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("RaceDatabase")));
+
+builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
 
 builder.Services.AddControllers();
 
@@ -37,12 +41,15 @@ if (app.Environment.IsDevelopment())
     var dbConnection = scope.ServiceProvider.GetRequiredService<RaceProjectContext>();
 
     dbConnection.Database.Migrate();
-    
+
     // Create a data seeder
     var dataSeeder = new DataSeeder(dbConnection);
 
     // Seed the test data
     await dataSeeder.SeedTestDataAsync();
+
+    app.UseRouting();
+    app.MapControllers();
 }
 
 if (app.Environment.IsProduction())
