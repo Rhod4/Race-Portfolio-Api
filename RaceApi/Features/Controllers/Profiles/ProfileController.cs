@@ -1,8 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using RaceApi.Persistence.Models;
-using RaceApi.Repositories.Profiles;
 using RaceApi.Repositories.Profiles.Interfaces;
 
 namespace RaceApi.Features.Controllers.Profiles;

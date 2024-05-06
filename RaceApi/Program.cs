@@ -1,13 +1,5 @@
-using System.Data;
-using System.Text;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Identity.Web;
-using Microsoft.Identity.Abstractions;
-using Microsoft.Identity.Web.Resource;
-using Microsoft.IdentityModel.Tokens;
 using RaceApi.Persistence;
 using RaceApi.Repositories.Profiles;
 using RaceApi.Repositories.Profiles.Interfaces;

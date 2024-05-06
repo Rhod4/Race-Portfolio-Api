@@ -1,4 +1,3 @@
-using System.Data;
 using RaceApi.Persistence;
 
 namespace RaceApi.Seeders;
