@@ -31,4 +31,14 @@ public class ProfileController : ControllerBase
             Success =  profile
         });
     }
+    [HttpPost]
+    [AllowAnonymous]
+    public async Task<ActionResult<Profile>> Post(Profile profile)
+    {
+        
+        return Ok(new
+        {
+            Success =  profile
+        });
+    }
 }

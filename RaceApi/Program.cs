@@ -1,10 +1,13 @@
 using System.Data;
+using System.Text;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Abstractions;
 using Microsoft.Identity.Web.Resource;
+using Microsoft.IdentityModel.Tokens;
 using RaceApi.Persistence;
 using RaceApi.Repositories.Profiles;
 using RaceApi.Repositories.Profiles.Interfaces;
@@ -13,8 +16,16 @@ using RaceApi.Seeders;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAdB2C"));
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.Cookie.HttpOnly = true;
+        options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // Enable secure cookies in production
+        options.Cookie.SameSite = SameSiteMode.Strict; // Set SameSite mode for cookies
+        options.LoginPath = "/Account/Login"; // Set the login path
+        options.LogoutPath = "/Account/Logout"; // Set the logout path
+    });
+
 builder.Services.AddAuthorization();
 
 builder.Services.AddDbContext<RaceProjectContext>(options =>
@@ -48,9 +59,14 @@ if (app.Environment.IsDevelopment())
     // Seed the test data
     await dataSeeder.SeedTestDataAsync();
 
-    app.UseRouting();
-    app.MapControllers();
 }
+
+app.UseRouting();
+    
+app.UseAuthentication(); // Add this line
+app.UseAuthorization(); // Add this line
+    
+app.MapControllers();
 
 if (app.Environment.IsProduction())
 {
