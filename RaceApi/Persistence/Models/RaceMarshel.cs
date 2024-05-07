@@ -10,7 +10,7 @@ public class RaceMarshel
     [ForeignKey("RaceId")]
     public Race Race { get; set; }  
     
-    public Guid ProfileId { get; set; }
+    public string ProfileId { get; set; }
     [ForeignKey("ProfileId")]
     public Profile Profile { get; set; }
 }

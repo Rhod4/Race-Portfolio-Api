@@ -1,4 +1,5 @@
 using RaceApi.Persistence;
+using RaceApi.Seeders.Profile;
 
 namespace RaceApi.Seeders;
 

@@ -7,17 +7,18 @@ namespace RaceApi.Repositories.Profiles;
 
 public class ProfileRepository: IProfileRepository
 {
-    private RaceProjectContext _raceProjectContext;
+    private RaceProjectContext _db;
 
     public ProfileRepository(RaceProjectContext raceProjectContext)
     {
-        _raceProjectContext = raceProjectContext;
+        _db = raceProjectContext;
     }
 
-    public async Task<Profile> GetProfile()
+    public async Task<Profile> GetProfile(string id)
     {
-         var profile = await _raceProjectContext.Profile.SingleAsync(p => p.Email == "James@GSnail.com");
+         var profile = await _db.Profile.SingleAsync(p => p.Id == id);
          
         return profile;
     }
+
 }

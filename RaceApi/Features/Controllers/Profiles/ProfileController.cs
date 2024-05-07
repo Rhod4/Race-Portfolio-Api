@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RaceApi.Persistence.Models;
@@ -19,20 +20,13 @@ public class ProfileController : ControllerBase
     }
 
     [HttpGet("test")]
-    [AllowAnonymous]
+    [Authorize]
     public async Task<ActionResult<Profile>> Get()
     {
-        var profile = await _profileRepository.GetProfile();
+        var user = HttpContext.User;
+        var userId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         
-        return Ok(new
-        {
-            Success =  profile
-        });
-    }
-    [HttpPost]
-    [AllowAnonymous]
-    public async Task<ActionResult<Profile>> Post(Profile profile)
-    {
+        var profile = await _profileRepository.GetProfile(userId);
         
         return Ok(new
         {

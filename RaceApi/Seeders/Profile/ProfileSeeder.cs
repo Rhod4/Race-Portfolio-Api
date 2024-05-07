@@ -1,21 +1,26 @@
+using Microsoft.AspNetCore.Identity;
 using RaceApi.Persistence;
-using RaceApi.Persistence.Models;
 
-namespace RaceApi.Seeders;
-
+namespace RaceApi.Seeders.Profile;
 
 public static class ProfileSeeder
 {
     public static async Task Seed( RaceProjectContext db)
     {
-        var profile = new Profile
+        var passwordHasher = new PasswordHasher<Persistence.Models.Profile>();        
+        
+        var profile = new Persistence.Models.Profile
         {
-            Id = new Guid(),
+            UserName = "test",
             Firstname = "James",
             Lastname = "Fletcher",
-            Email = "James@GSnail.com"
+            Email = "James@GSnail.com",
         };
+        
+        var hashedPassword = passwordHasher.HashPassword(profile, "Password123");
 
+        profile.PasswordHash = hashedPassword;
+        
         db.Profile.Add(profile);
         await db.SaveChangesAsync();
     }

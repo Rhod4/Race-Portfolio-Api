@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using RaceApi.Persistence;
+using RaceApi.Repositories.Identity;
+using RaceApi.Repositories.Identity.Interface;
 using RaceApi.Repositories.Profiles;
 using RaceApi.Repositories.Profiles.Interfaces;
 using RaceApi.Seeders;
@@ -12,10 +14,10 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     .AddCookie(options =>
     {
         options.Cookie.HttpOnly = true;
-        options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // Enable secure cookies in production
-        options.Cookie.SameSite = SameSiteMode.Strict; // Set SameSite mode for cookies
-        options.LoginPath = "/Account/Login"; // Set the login path
-        options.LogoutPath = "/Account/Logout"; // Set the logout path
+        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+        options.Cookie.SameSite = SameSiteMode.Strict; 
+        options.LoginPath = "/Account/Login"; 
+        options.LogoutPath = "/Account/Logout"; 
     });
 
 builder.Services.AddAuthorization();
@@ -24,6 +26,7 @@ builder.Services.AddDbContext<RaceProjectContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("RaceDatabase")));
 
 builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
+builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 
 builder.Services.AddControllers();
 
@@ -40,23 +43,20 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
     var scope = app.Services.CreateAsyncScope();
 
-    // Resove the DB Connection Service
     var dbConnection = scope.ServiceProvider.GetRequiredService<RaceProjectContext>();
 
     dbConnection.Database.Migrate();
 
-    // Create a data seeder
     var dataSeeder = new DataSeeder(dbConnection);
 
-    // Seed the test data
     await dataSeeder.SeedTestDataAsync();
 
 }
 
 app.UseRouting();
     
-app.UseAuthentication(); // Add this line
-app.UseAuthorization(); // Add this line
+app.UseAuthentication();
+app.UseAuthorization();
     
 app.MapControllers();
 
