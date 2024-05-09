@@ -22,11 +22,13 @@ public class AuthController : ControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] string login, string password)
     {
-        if (await _authRepository.LoginSuccess(login, password))
+        var userId = await _authRepository.LoginSuccess(login, password);
+        
+        if (userId != null)
         {
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, login),
+                new Claim(ClaimTypes.Name, userId.ToString()!),
             };
 
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);

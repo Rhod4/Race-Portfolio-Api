@@ -24,13 +24,18 @@ public class ProfileController : ControllerBase
     public async Task<ActionResult<Profile>> Get()
     {
         var user = HttpContext.User;
+        var test = HttpContext.User.Identity;
         var userId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        
+         
         
         var profile = await _profileRepository.GetProfile(userId);
         
         return Ok(new
         {
-            Success =  profile
+            Success =  profile,
+            User = user,
+            UserId = userId
         });
     }
 }

@@ -15,19 +15,23 @@ public class AuthRepository: IAuthRepository
         _db = db;
     }
 
-    public async Task<bool> LoginSuccess(string username, string password)
+    public async Task<Guid?> LoginSuccess(string username, string password)
     {
         var user = _db.Profile.SingleOrDefault(p => p.UserName == username);
 
-        if (user == null ||  user.PasswordHash == null)
+        if (user?.PasswordHash == null)
         {
-            return false;
+            return null;
         }
-
+        
         var passwordHasher = new PasswordHasher<Profile>();
         
         var verifyPassword = passwordHasher.VerifyHashedPassword(user, user.PasswordHash, password);
 
-        return verifyPassword == PasswordVerificationResult.Success;
+        if (verifyPassword == PasswordVerificationResult.Success)
+        {
+            return Guid.Parse(user.Id);
+        }
+        return null;
     }
 }
