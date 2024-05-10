@@ -1,4 +1,4 @@
-namespace RaceApi.Features.Controllers.RacController;
+namespace RaceApi.Features.Controllers.Race;
 
 public class RaceController
 {
