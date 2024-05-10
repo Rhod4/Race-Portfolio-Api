@@ -25,17 +25,14 @@ public class ProfileController : ControllerBase
     {
         var user = HttpContext.User;
         var test = HttpContext.User.Identity;
-        var userId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        //var userId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         
-         
-        
-        var profile = await _profileRepository.GetProfile(userId);
+        var profile = await _profileRepository.GetProfile(test.Name);
         
         return Ok(new
         {
             Success =  profile,
             User = user,
-            UserId = userId
         });
     }
 }

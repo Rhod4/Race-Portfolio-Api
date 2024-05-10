@@ -5,24 +5,52 @@ namespace RaceApi.Seeders.Profile;
 
 public static class ProfileSeeder
 {
-    public static async Task Seed( RaceProjectContext db)
-    {
-        var passwordHasher = new PasswordHasher<Persistence.Models.Profile>();        
-        
-        var profile = new Persistence.Models.Profile
+    private static readonly IEnumerable<ProfileSeedingModel> Profiles =
+    [
+        new ProfileSeedingModel
         {
-            UserName = "test",
-            Firstname = "James",
-            Lastname = "Fletcher",
-            Email = "James@GSnail.com",
-        };
-        
-        var hashedPassword = passwordHasher.HashPassword(profile, "Password123");
+            Username = "test",
+            FirstName = "James",
+            LastName = "Fletcher",
+            Email = "James@GSnail.com"
+        },
+        new ProfileSeedingModel
+        {
+            Username = "user",
+            FirstName = "garry",
+            LastName = "Account",
+            Email = "Admin@Race.com"
+        },
+        new ProfileSeedingModel
+        {
+            Username = "admin",
+            FirstName = "Admin",
+            LastName = "Account",
+            Email = "Admin@Race.com",
+        },
+    ];
+    
+    public static async Task Seed(RaceProjectContext db)
+    {
+        foreach (var profile in Profiles)
+        {
+            var profileForDb = new Persistence.Models.Profile
+            {
+                UserName = profile.Username,
+                Firstname = profile.FirstName,
+                Lastname = profile.LastName,
+                Email = profile.Email,
+            };
+            
+            var passwordHasher = new PasswordHasher<Persistence.Models.Profile>();        
+            
+            var hashedPassword = passwordHasher.HashPassword(profileForDb, profile.Password);
 
-        profile.PasswordHash = hashedPassword;
-        
-        db.Profile.Add(profile);
-        await db.SaveChangesAsync();
+            profileForDb.PasswordHash = hashedPassword;
+            
+            await db.Profile.AddAsync(profileForDb);
+            await db.SaveChangesAsync();
+        }
     }
     
 }
