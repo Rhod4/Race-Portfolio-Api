@@ -12,7 +12,8 @@ public static class ProfileSeeder
             Username = "test",
             FirstName = "James",
             LastName = "Fletcher",
-            Email = "James@GSnail.com"
+            Email = "James@GSnail.com",
+            Password = "Password123" 
         },
         new ProfileSeedingModel
         {
