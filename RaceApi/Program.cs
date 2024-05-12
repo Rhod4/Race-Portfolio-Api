@@ -5,6 +5,8 @@ using RaceApi.Repositories.Identity;
 using RaceApi.Repositories.Identity.Interface;
 using RaceApi.Repositories.Profiles;
 using RaceApi.Repositories.Profiles.Interfaces;
+using RaceApi.Repositories.Races;
+using RaceApi.Repositories.Races.Interfaces;
 using RaceApi.Seeders;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,6 +22,18 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.LogoutPath = "/Account/Logout"; 
     });
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowLocalhost",
+        b =>
+        {
+            b.WithOrigins("http://localhost:5173") // Replace 'yourPort' with the port your client is running on
+                .AllowAnyMethod()
+                .AllowAnyHeader();
+        });
+});
+
+
 builder.Services.AddAuthorization();
 
 builder.Services.AddDbContext<RaceProjectContext>(options =>
@@ -27,6 +41,7 @@ builder.Services.AddDbContext<RaceProjectContext>(options =>
 
 builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+builder.Services.AddScoped<IRaceRepository, RaceRepository>();
 
 builder.Services.AddControllers();
 
@@ -52,6 +67,8 @@ if (app.Environment.IsDevelopment())
     await dataSeeder.SeedTestDataAsync();
 
 }
+
+app.UseCors("AllowLocalhost");
 
 app.UseRouting();
     
