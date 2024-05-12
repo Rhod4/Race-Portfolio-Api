@@ -23,15 +23,13 @@ public class ProfileController : ControllerBase
     [Authorize]
     public async Task<ActionResult<Profile>> Get()
     {
-        var user = HttpContext.User;
         var test = HttpContext.User.Identity;
         
         var profile = await _profileRepository.GetProfile(test.Name);
         
         return Ok(new
         {
-            Success =  profile,
-            User = user,
+            Success =  profile.Id,
         });
     }
 }
