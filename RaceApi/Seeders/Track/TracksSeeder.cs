@@ -66,7 +66,7 @@ public class TracksSeeder
     public static async Task Seed(RaceProjectContext db)
     {
         var ukTracks = await TracksByGame(db, UkTrack.ToList(), "88116dc3-78bf-4bcf-97ab-1a45ae1470e6");
-        var italianTracks = await TracksByGame(db, UkTrack.ToList(), "88116dc3-78bf-4bcf-97ab-1a45ae1470e6");
+        var italianTracks = await TracksByGame(db, ItalianTrack.ToList(), "88116dc3-78bf-4bcf-97ab-1a45ae1470e6");
 
         List<Persistence.Models.Track> track = [..ukTracks.ToList(), ..italianTracks.ToList()];
         

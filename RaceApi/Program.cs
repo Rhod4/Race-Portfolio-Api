@@ -7,6 +7,8 @@ using RaceApi.Repositories.Profiles;
 using RaceApi.Repositories.Profiles.Interfaces;
 using RaceApi.Repositories.Races;
 using RaceApi.Repositories.Races.Interfaces;
+using RaceApi.Repositories.Tracks;
+using RaceApi.Repositories.Tracks.Interfaces;
 using RaceApi.Seeders;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -42,12 +44,18 @@ builder.Services.AddDbContext<RaceProjectContext>(options =>
 builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<IRaceRepository, RaceRepository>();
+builder.Services.AddScoped<ITrackRepository, TrackRepository>();
 
 builder.Services.AddControllers();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddControllersWithViews()
+    .AddNewtonsoftJson(options =>
+        options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+    );
 
 var app = builder.Build();
 
