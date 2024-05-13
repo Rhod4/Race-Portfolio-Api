@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using RaceApi.Persistence;
+using RaceApi.Repositories.Games;
+using RaceApi.Repositories.Games.Interfaces;
 using RaceApi.Repositories.Identity;
 using RaceApi.Repositories.Identity.Interface;
 using RaceApi.Repositories.Profiles;
@@ -45,6 +47,7 @@ builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<IRaceRepository, RaceRepository>();
 builder.Services.AddScoped<ITrackRepository, TrackRepository>();
+builder.Services.AddScoped<IGameRepository, GameRepository>();
 
 builder.Services.AddControllers();
 

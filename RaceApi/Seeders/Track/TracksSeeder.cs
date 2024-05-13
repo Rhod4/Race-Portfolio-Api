@@ -30,9 +30,9 @@ public class TracksSeeder
         [
         new Persistence.Models.Track
         {
-        Id = Guid.Parse("c2fc6e3f-6997-48e7-acc7-de0fad321877"),
-        Name = "Monza",
-        LocationId = Guid.Parse("05138faa-e375-4263-95e2-956f49be749c"),
+            Id = Guid.Parse("c2fc6e3f-6997-48e7-acc7-de0fad321877"),
+            Name = "Monza",
+            LocationId = Guid.Parse("05138faa-e375-4263-95e2-956f49be749c"),
         },
         new Persistence.Models.Track
         {
