@@ -13,7 +13,7 @@ public class RaceSeeder
 
         var race = new Persistence.Models.Race
         {
-            Id = new Guid(),
+            Id = Guid.Parse("7b70673b-d00c-49ad-8508-4bb968dd7e06"),
             Name = "Race 1",
             CreatedOn = default,
             CreatedBy = createdByProfile,

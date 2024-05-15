@@ -18,18 +18,4 @@ public class ProfileController : ControllerBase
     {
         _profileRepository = profileRepository;
     }
-
-    [HttpGet("test")]
-    [Authorize]
-    public async Task<ActionResult<Profile>> Get()
-    {
-        var test = HttpContext.User.Identity;
-        
-        var profile = await _profileRepository.GetProfile(test.Name);
-        
-        return Ok(new
-        {
-            Success =  profile.Id,
-        });
-    }
 }

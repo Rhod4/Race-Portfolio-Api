@@ -3,6 +3,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
+using RaceApi.Features.Models;
 using RaceApi.Repositories.Identity.Interface;
 
 namespace RaceApi.Features.Controllers.Identity;
@@ -20,9 +21,9 @@ public class AuthController : ControllerBase
     // Example Login Action in your controller
 
     [HttpPost("login")]
-    public async Task<IActionResult> Login([FromBody] string login, string password)
+    public async Task<IActionResult> Login(Login login)
     {
-        var userId = await _authRepository.LoginSuccess(login, password);
+        var userId = await _authRepository.LoginSuccess(login.Username, login.Password);
         
         if (userId != null)
         {
@@ -50,5 +51,19 @@ public class AuthController : ControllerBase
         return Ok("Index");
     }
 
+
+    [HttpGet("test")]
+    [Authorize]
+    public async Task<ActionResult<dynamic>> Get()
+    {
+        // var test = HttpContext.User.Identity;
+        //
+        // var profile = await _profileRepository.GetProfile(test.Name);
+        
+        return Ok(new
+        {
+            Success =  "profile.Id",
+        });
+    }
     
 }
