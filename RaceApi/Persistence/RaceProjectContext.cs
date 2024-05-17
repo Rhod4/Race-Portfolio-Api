@@ -1,9 +1,10 @@
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using RaceApi.Persistence.Models;
 
 namespace RaceApi.Persistence;
 
-public class RaceProjectContext : DbContext
+public class RaceProjectContext : IdentityDbContext<Profile>
 {
     public RaceProjectContext(DbContextOptions<RaceProjectContext> options)
         : base(options)

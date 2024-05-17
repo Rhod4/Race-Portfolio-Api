@@ -1,6 +1,11 @@
-using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using RaceApi.Features.ApiMaps.Game;
+using RaceApi.Features.ApiMaps.Identity;
+using RaceApi.Features.ApiMaps.Races;
+using RaceApi.Features.ApiMaps.Tracks;
 using RaceApi.Persistence;
+using RaceApi.Persistence.Models;
 using RaceApi.Repositories.Games;
 using RaceApi.Repositories.Games.Interfaces;
 using RaceApi.Repositories.Identity;
@@ -15,17 +20,6 @@ using RaceApi.Seeders;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(options =>
-    {
-        options.Cookie.HttpOnly = true;
-        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-        options.Cookie.SameSite = SameSiteMode.Strict; 
-        options.LoginPath = "/Account/Login"; 
-        options.LogoutPath = "/Account/Logout"; 
-    });
-
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowLocalhost",
@@ -33,15 +27,23 @@ builder.Services.AddCors(options =>
         {
             b.WithOrigins("http://localhost:5173") // Replace 'yourPort' with the port your client is running on
                 .AllowAnyMethod()
-                .AllowAnyHeader();
+                .AllowAnyHeader()
+                .AllowCredentials();
         });
 });
 
 
-builder.Services.AddAuthorization();
-
 builder.Services.AddDbContext<RaceProjectContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("RaceDatabase")));
+
+builder.Services.AddIdentityApiEndpoints<Profile>()
+    .AddEntityFrameworkStores<RaceProjectContext>()
+    .AddDefaultTokenProviders();;
+
+
+// Add services to the container.
+
+builder.Services.AddAuthorization();
 
 builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
@@ -51,7 +53,6 @@ builder.Services.AddScoped<IGameRepository, GameRepository>();
 
 builder.Services.AddControllers();
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -61,6 +62,8 @@ builder.Services.AddControllersWithViews()
     );
 
 var app = builder.Build();
+
+app.MapIdentityApi<Profile>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -79,18 +82,22 @@ if (app.Environment.IsDevelopment())
 
 }
 
+
 app.UseCors("AllowLocalhost");
 
 app.UseRouting();
     
 app.UseAuthentication();
 app.UseAuthorization();
-    
-app.MapControllers();
 
 if (app.Environment.IsProduction())
 {
     app.UseHttpsRedirection();
 }
+
+AuthEndpoints.Map(app);
+GameEndpoint.Map(app);
+RaceEndpoints.Map(app);
+TrackEndpoints.Map(app);
 
 app.Run();

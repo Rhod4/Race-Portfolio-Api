@@ -20,4 +20,14 @@ public class RaceRepository: IRaceRepository
 
         return races;
     }
+
+    public async Task AddUserAsParticipateInRace(Guid raceId, string userId ,int userRaceNumber)
+    {
+        await _db.RaceParticipants.AddAsync(new RaceParticipants
+        {
+            RaceId = raceId,
+            ProfileId = userId,
+            UserRaceNumber = userRaceNumber
+        });
+    }
 }

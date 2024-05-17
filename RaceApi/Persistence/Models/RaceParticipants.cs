@@ -12,4 +12,6 @@ public class RaceParticipants
     public string ProfileId { get; set; }
     [ForeignKey("ProfileId")]
     public Profile Profile { get; set; }
+    
+    public int UserRaceNumber { get; set; }
 }
