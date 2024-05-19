@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using RaceApi.Features.ApiMaps.Game;
-using RaceApi.Features.ApiMaps.Identity;
 using RaceApi.Features.ApiMaps.Profiles;
 using RaceApi.Features.ApiMaps.Races;
 using RaceApi.Features.ApiMaps.Tracks;
+using RaceApi.Features.Endpoints.Game;
+using RaceApi.Features.Endpoints.Identity;
 using RaceApi.Persistence;
 using RaceApi.Persistence.Models;
 using RaceApi.Repositories.Games;

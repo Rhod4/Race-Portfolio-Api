@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using RaceApi.Persistence.Models;
 
-namespace RaceApi.Features.ApiMaps.Identity;
+namespace RaceApi.Features.Endpoints.Identity;
 
 public static class AuthEndpoints
 {

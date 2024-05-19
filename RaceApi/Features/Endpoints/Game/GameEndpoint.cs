@@ -1,6 +1,6 @@
 using RaceApi.Repositories.Games.Interfaces;
 
-namespace RaceApi.Features.ApiMaps.Game;
+namespace RaceApi.Features.Endpoints.Game;
 
 public static class GameEndpoint
 {
