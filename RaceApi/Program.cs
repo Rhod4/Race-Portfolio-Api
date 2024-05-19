@@ -1,10 +1,11 @@
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using RaceApi.Features.ApiMaps.Profiles;
-using RaceApi.Features.ApiMaps.Races;
 using RaceApi.Features.ApiMaps.Tracks;
 using RaceApi.Features.Endpoints.Game;
 using RaceApi.Features.Endpoints.Identity;
+using RaceApi.Features.Endpoints.Races;
 using RaceApi.Persistence;
 using RaceApi.Persistence.Models;
 using RaceApi.Repositories.Games;
@@ -61,6 +62,9 @@ builder.Services.AddControllersWithViews()
     .AddNewtonsoftJson(options =>
         options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
     );
+
+builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options =>
+    options.SerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
 var app = builder.Build();
 
