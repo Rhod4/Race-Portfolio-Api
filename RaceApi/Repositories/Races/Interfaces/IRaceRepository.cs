@@ -9,4 +9,5 @@ public interface IRaceRepository
     public Task AddUserToRaceParticipants(Guid raceId, string userId ,int userRaceNumber); 
     public Task RemoveUserFromRaceParticipants(Guid raceId, string userId); 
     public Task<bool> AlreadyParticipating(Guid raceId, string userId);
+    public Task<IEnumerable<RaceParticipants>> GetRaceParticipants(Guid raceId);
 }

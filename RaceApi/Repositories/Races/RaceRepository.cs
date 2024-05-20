@@ -63,4 +63,14 @@ public class RaceRepository: IRaceRepository
     {
         return await _db.RaceParticipants.AnyAsync(rp => rp.RaceId == raceId && rp.ProfileId == userId);
     }
+
+    public async Task<IEnumerable<RaceParticipants>> GetRaceParticipants(Guid raceId)
+    {
+        return await _db.RaceParticipants
+            .Include(rp => rp.Profile)
+            .Include(rp => rp.Car)
+            .Include(rp => rp.RaceId)
+            .Where(rp => rp.RaceId == raceId)
+            .ToListAsync();
+    }
 }

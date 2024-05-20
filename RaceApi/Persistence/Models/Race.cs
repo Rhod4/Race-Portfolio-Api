@@ -27,10 +27,6 @@ public class Race
     public ICollection<RaceParticipants> RaceParticipants { get; set; } = null!;
     public ICollection<RaceMarshel> RaceMarshel { get; set; } = null!;
     
-    //will need to be results
-    
-    //min entry requirements
-    
-    //public ICollection<Guid> AllowedVehicles { get; set; } = null!;
+    public ICollection<RaceSeries> RaceSeries { get; set; } = null!;
     
 }

@@ -12,15 +12,16 @@ public static class ProfileSeeder
             Username = "test",
             FirstName = "James",
             LastName = "Fletcher",
-            Email = "James@GSnail.com",
-            Password = "Password123!" 
+            Email = "T@T.com",
+            Password = "Test123!" 
         },
         new ProfileSeedingModel
         {
             Username = "user",
             FirstName = "garry",
             LastName = "Account",
-            Email = "Admin@Race.com"
+            Email = "Admin@Race.com",
+            Password = "Test123!" 
         },
         new ProfileSeedingModel
         {
@@ -28,6 +29,7 @@ public static class ProfileSeeder
             FirstName = "Admin",
             LastName = "Account",
             Email = "Admin@Race.com",
+            Password = "Test123!" 
         },
     ];
     

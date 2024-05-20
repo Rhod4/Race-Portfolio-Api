@@ -1,17 +1,119 @@
-Table race{
-  Id guid [primary key]
-  Name string
-  CreatedOn datetime
-  CreatedBy guid
-  UpdatedOn datetime
-  UpdatedBy guid
-  RaceDate datetime
-  Participants profile
-  Marshals profile
-}
-Table profile{
-  Id guid [primary key]
-  Name string
-}
-Ref: race.Participants > profile.Id
 
+Table "AspNetUsers" {
+  "Id" nvarchar(450) [pk, not null]
+  "Firstname" nvarchar(max) [not null]
+  "Lastname" nvarchar(max) [not null]
+  "UserName" nvarchar(256)
+  "NormalizedUserName" nvarchar(256)
+  "Email" nvarchar(256)
+  "NormalizedEmail" nvarchar(256)
+  "EmailConfirmed" bit [not null]
+  "PasswordHash" nvarchar(max)
+  "SecurityStamp" nvarchar(max)
+  "ConcurrencyStamp" nvarchar(max)
+  "PhoneNumber" nvarchar(max)
+  "PhoneNumberConfirmed" bit [not null]
+  "TwoFactorEnabled" bit [not null]
+  "LockoutEnd" datetimeoffset
+  "LockoutEnabled" bit [not null]
+  "AccessFailedCount" int [not null]
+}
+
+Table "Game" {
+  "Id" uniqueidentifier [pk, not null]
+  "Name" nvarchar(max) [not null]
+  "RaceType" uniqueidentifier [not null]
+}
+
+Table "Location" {
+  "Id" uniqueidentifier [pk, not null]
+  "Name" nvarchar(max) [not null]
+}
+
+Table "RaceType" {
+  "Id" uniqueidentifier [pk, not null]
+  "Name" nvarchar(max) [not null]
+  "Type" nvarchar(max) [not null]
+}
+
+
+Table "Track" {
+  "Id" uniqueidentifier [pk, not null]
+  "Name" nvarchar(max) [not null]
+  "Description" nvarchar(max) [not null]
+  "LocationId" uniqueidentifier [not null]
+  "GameId" uniqueidentifier [not null]
+
+  Indexes {
+    GameId [name: "IX_Track_GameId"]
+    LocationId [name: "IX_Track_LocationId"]
+  }
+}
+
+Table "Race" {
+  "Id" uniqueidentifier [pk, not null]
+  "Name" nvarchar(max) [not null]
+  "CreatedOn" datetime2 [not null]
+  "CreatedById" nvarchar(450) [not null]
+  "UpdatedOn" datetime2
+  "UpdatedById" nvarchar(450)
+  "RaceDate" datetime2 [not null]
+  "IsDeleted" bit [not null]
+  "DeletedOn" datetime2
+  "DeletedById" nvarchar(450)
+  "GameId" uniqueidentifier [not null]
+  "TrackId" uniqueidentifier [not null]
+
+  Indexes {
+    CreatedById [name: "IX_Race_CreatedById"]
+    DeletedById [name: "IX_Race_DeletedById"]
+    GameId [name: "IX_Race_GameId"]
+    TrackId [name: "IX_Race_TrackId"]
+    UpdatedById [name: "IX_Race_UpdatedById"]
+  }
+}
+
+Table "RaceMarshel" {
+  "Id" uniqueidentifier [pk, not null]
+  "RaceId" uniqueidentifier [not null]
+  "ProfileId" nvarchar(450) [not null]
+
+  Indexes {
+    ProfileId [name: "IX_RaceMarshel_ProfileId"]
+    RaceId [name: "IX_RaceMarshel_RaceId"]
+  }
+}
+
+Table "RaceParticipants" {
+  "Id" uniqueidentifier [pk, not null]
+  "RaceId" uniqueidentifier [not null]
+  "ProfileId" nvarchar(450) [not null]
+  "UserRaceNumber" int [not null, default: 0]
+
+  Indexes {
+    ProfileId [name: "IX_RaceParticipants_ProfileId"]
+    RaceId [name: "IX_RaceParticipants_RaceId"]
+  }
+}
+
+Ref:"Location"."Id" < "Track"."LocationId"
+
+Ref:"Game"."Id" < "Track"."GameId" [delete: cascade]
+
+Ref:"AspNetUsers"."Id" < "Race"."CreatedById" [delete: cascade]
+
+Ref:"AspNetUsers"."Id" < "Race"."UpdatedById"
+
+Ref:"AspNetUsers"."Id" < "Race"."DeletedById"
+
+Ref:"Game"."Id" < "Race"."GameId"
+
+Ref:"Track"."Id" < "Race"."TrackId" [delete: cascade]
+
+Ref:"Race"."Id" < "RaceMarshel"."RaceId"
+
+Ref:"AspNetUsers"."Id" < "RaceMarshel"."ProfileId" [delete: cascade]
+
+Ref:"Race"."Id" < "RaceParticipants"."RaceId"
+
+Ref:"AspNetUsers"."Id" < "RaceParticipants"."ProfileId" [delete: cascade]

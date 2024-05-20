@@ -11,4 +11,6 @@ public class Game
     public ICollection<Race> Races { get; set; }
 
     public Guid RaceType { get; set; }
+    
+    public ICollection<GameCars> Cars { get; set; }
 }
