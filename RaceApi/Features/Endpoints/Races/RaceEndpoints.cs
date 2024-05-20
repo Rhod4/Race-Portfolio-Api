@@ -61,7 +61,7 @@ public abstract class RaceEndpoints
             .WithOpenApi()
             .RequireAuthorization();
         
-        app.MapPost("/api/Race/RemoveParticipateInRace", async (Guid raceId, HttpContext httpContext) =>
+        app.MapPost("/api/Race/RemoveParticipateInRace/{raceId:Guid}", async (Guid raceId, HttpContext httpContext) =>
             {
                 try
                 {
@@ -85,8 +85,9 @@ public abstract class RaceEndpoints
                     return Results.BadRequest(new { Error = e.Message });
                 }
             })
+            
             .WithOpenApi()
-            .RequireAuthorization();app.MapPost("/api/Race/RemoveParticipateInRace", async (Guid raceId, HttpContext httpContext) =>
+            .RequireAuthorization();app.MapPost("/api/Race/AlreadyRacing/{raceId:Guid}", async (Guid raceId, HttpContext httpContext) =>
             {
                 try
                 {
