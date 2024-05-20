@@ -69,8 +69,7 @@ public class RaceRepository: IRaceRepository
         return await _db.RaceParticipants
             .Include(rp => rp.Profile)
             .Include(rp => rp.Car)
-            .Include(rp => rp.RaceId)
-            .Where(rp => rp.RaceId == raceId)
+            .Where(rp => rp.Race.Id == raceId)
             .ToListAsync();
     }
 }
