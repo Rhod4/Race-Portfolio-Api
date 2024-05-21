@@ -38,13 +38,16 @@ public class RaceRepository: IRaceRepository
             .SingleAsync(race => race.Id == id);
     }
 
-    public async Task AddUserToRaceParticipants(Guid raceId, string userId ,int userRaceNumber)
+    public async Task AddUserToRaceParticipants(Guid raceId, string userId ,int userRaceNumber, Guid carId)
     {
+        var car = await _db.Cars.SingleAsync(car => car.Id == carId);
+        
         await _db.RaceParticipants.AddAsync(new RaceParticipants
         {
             RaceId = raceId,
             ProfileId = userId,
-            UserRaceNumber = userRaceNumber
+            UserRaceNumber = userRaceNumber,
+            Car = car
         });
         await _db.SaveChangesAsync();
     }

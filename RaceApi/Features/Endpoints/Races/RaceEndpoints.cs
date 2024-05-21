@@ -33,7 +33,7 @@ public abstract class RaceEndpoints
             .WithOpenApi()
             .RequireAuthorization();
 
-        app.MapPost("/api/Race/ParticipateInRace", async (Guid raceId, int raceNumber, HttpContext httpContext) =>
+        app.MapPost("/api/Race/ParticipateInRace", async (Guid raceId, int raceNumber, Guid carId, HttpContext httpContext) =>
             {
                 try
                 {
@@ -49,7 +49,7 @@ public abstract class RaceEndpoints
                     if (await raceRepository.AlreadyParticipating(raceId, user.Id))
                         return Results.BadRequest(new { Error = "Already Participating" });
 
-                    await raceRepository.AddUserToRaceParticipants(raceId, user.Id, raceNumber);
+                    await raceRepository.AddUserToRaceParticipants(raceId, user.Id, raceNumber, carId);
 
                     return Results.Ok(new { Success = "Added To Race" });
                 }
