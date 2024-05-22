@@ -1,4 +1,6 @@
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using RaceApi.Models.Dto;
 using RaceApi.Persistence;
 using RaceApi.Persistence.Models;
 using RaceApi.Repositories.Races.Interfaces;
@@ -8,13 +10,15 @@ namespace RaceApi.Repositories.Races;
 public class RaceRepository: IRaceRepository
 {
     private readonly RaceProjectContext _db;
+    private readonly IMapper _mapper;
 
-    public RaceRepository(RaceProjectContext db)
+    public RaceRepository(RaceProjectContext db, IMapper mapper)
     {
         _db = db;
+        _mapper = mapper;
     }
 
-    public async Task<IEnumerable<Race>> GetRaces(int? total)
+    public async Task<IEnumerable<RaceDto>> GetRaces(int? total)
     {
         var races = await _db.Race.Include(r => r.Game)
             .ToListAsync();
@@ -24,8 +28,11 @@ public class RaceRepository: IRaceRepository
         {
             races = races.Take(total.Value).ToList();
         }
+
+        var raceDtos = races.Select(race =>
+            _mapper.Map<RaceDto>(race));
         
-        return races;
+        return raceDtos;
     }
 
     public async Task<Race> GetRace(Guid id)

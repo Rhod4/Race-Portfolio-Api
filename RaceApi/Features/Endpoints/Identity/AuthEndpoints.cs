@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using RaceApi.Models.Dto;
+using RaceApi.Models.ViewModels;
 using RaceApi.Persistence.Models;
 
 namespace RaceApi.Features.Endpoints.Identity;
@@ -8,13 +10,6 @@ public static class AuthEndpoints
 {
     public static void Map(WebApplication app)
     {
-        app.MapGet("/api/auth/Test", async (HttpContext httpContext) =>
-            {
-                return Results.Ok("Logged out successfully");
-            })
-            .WithOpenApi()
-            .RequireAuthorization();
-        
         app.MapPost("/api/auth/logout", async (SignInManager<Profile> signInManager,
                 [FromBody] object empty) =>
             {

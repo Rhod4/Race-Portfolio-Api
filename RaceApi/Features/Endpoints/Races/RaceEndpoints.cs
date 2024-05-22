@@ -15,6 +15,8 @@ public abstract class RaceEndpoints
 
                 var races = await raceRepository.GetRaces(total);
 
+                
+                
                 return Results.Ok(new { Success = races });
             })
             .WithOpenApi();
