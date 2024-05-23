@@ -1,3 +1,4 @@
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using RaceApi.Models.Dto;
 using RaceApi.Persistence;
@@ -9,17 +10,19 @@ namespace RaceApi.Repositories.Profiles;
 public class ProfileRepository: IProfileRepository
 {
     private RaceProjectContext _db;
+    private IMapper _mapper;
 
-    public ProfileRepository(RaceProjectContext raceProjectContext)
+    public ProfileRepository(RaceProjectContext raceProjectContext, IMapper mapper)
     {
         _db = raceProjectContext;
+        _mapper = mapper;
     }
 
-    public async Task<Profile> GetProfileById(string id)
+    public async Task<ProfileDto> GetProfileById(string id)
     {
          var profile = await _db.Profile.SingleAsync(p => p.Id == id);
-         
-        return profile;
+
+         return _mapper.Map<ProfileDto>(profile);
     }
 
     public async Task<ProfileDetailsDto?> AddUserDetailsToDatabase(ProfileDetailsDto profile)

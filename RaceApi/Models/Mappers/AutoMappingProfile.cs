@@ -10,15 +10,16 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
-        // Map Race entity to RaceDto
+        //Database model to Dto
         CreateMap<Race, RaceDto>()
+            .ForMember(dest => dest.CreatedBy, opt => opt.MapFrom(src => src.CreatedBy))
+            .ForMember(dest => dest.UpdatedBy, opt => opt.MapFrom(src => src.UpdatedBy))
             .ForMember(dest => dest.Game, opt => opt.MapFrom(src => src.Game))
             .ForMember(dest => dest.Track, opt => opt.MapFrom(src => src.Track))
             .ForMember(dest => dest.RaceParticipants, opt => opt.MapFrom(src => src.RaceParticipants))
             .ForMember(dest => dest.RaceMarshel, opt => opt.MapFrom(src => src.RaceMarshel))
             .ForMember(dest => dest.RaceSeries, opt => opt.MapFrom(src => src.RaceSeries));
 
-        // Map nested objects
         CreateMap<Game, GameDto>();
         CreateMap<Track, TrackDto>();
         CreateMap<RaceParticipants, RaceParticipantsDto>()
@@ -28,25 +29,29 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.Profile, opt => opt.MapFrom(src => src.Profile));
         CreateMap<RaceSeries, RaceSeriesDto>();
         CreateMap<Cars, CarsDto>();
-        CreateMap<Profile, ProfileDto>();
-        
-        CreateMap<RaceDto, RaceViewModel>()
-            .ForMember(dest => dest.Game, opt => opt.MapFrom(src => src.Game))
-            .ForMember(dest => dest.Track, opt => opt.MapFrom(src => src.Track))
-            .ForMember(dest => dest.RaceParticipants, opt => opt.MapFrom(src => src.RaceParticipants))
-            .ForMember(dest => dest.RaceMarshel, opt => opt.MapFrom(src => src.RaceMarshel))
-            .ForMember(dest => dest.RaceSeries, opt => opt.MapFrom(src => src.RaceSeries));
+        CreateMap<RaceApi.Persistence.Models.Profile, ProfileDto>();
 
-        // Map nested objects
+        CreateMap<Location, LocationDto>();
+        
+        //DTO To ViewModel
+        CreateMap<RaceDto, RaceViewModel>();
         CreateMap<GameDto, GameViewModel>();
         CreateMap<TrackDto, TrackViewModel>();
-        CreateMap<RaceParticipantsDto, RaceParticipantsViewModel>()
-            .ForMember(dest => dest.Profile, opt => opt.MapFrom(src => src.Profile))
-            .ForMember(dest => dest.Car, opt => opt.MapFrom(src => src.Car));
-        CreateMap<RaceMarshelDto, RaceMarshelViewModel>()
-            .ForMember(dest => dest.Profile, opt => opt.MapFrom(src => src.Profile));
+        CreateMap<RaceParticipantsDto, RaceParticipantsViewModel>();
+        CreateMap<RaceMarshelDto, RaceMarshelViewModel>();
         CreateMap<RaceSeriesDto, RaceSeriesViewModel>();
         CreateMap<CarsDto, CarsViewModel>();
         CreateMap<ProfileDto, ProfileViewModel>();
+        CreateMap<ProfileDto, ProfileDetailsViewModel>();
+
+        //ViewModel To DTO
+        CreateMap<RaceViewModel, RaceDto>();
+        CreateMap<GameViewModel, GameDto>();
+        CreateMap<TrackViewModel, TrackDto>();
+        CreateMap<RaceParticipantsViewModel, RaceParticipantsDto>();
+        CreateMap<RaceMarshelViewModel, RaceMarshelDto>();
+        CreateMap<RaceSeriesViewModel, RaceSeriesDto>();
+        CreateMap<CarsViewModel, CarsDto>();
+        CreateMap<ProfileViewModel, ProfileDto>();
     }
 }

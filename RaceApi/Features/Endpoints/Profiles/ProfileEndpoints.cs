@@ -1,15 +1,17 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using RaceApi.Models.Dto;
 using RaceApi.Models.Mappers;
 using RaceApi.Models.ViewModels;
-using RaceApi.Persistence.Models;
 using RaceApi.Repositories.Profiles.Interfaces;
+using Profile = RaceApi.Persistence.Models.Profile;
 
 namespace RaceApi.Features.Endpoints.Profiles;
 
 public class ProfileEndpoints
 {
-    public static void Map(WebApplication app)
+
+    public static void Map(WebApplication app, IMapper mapper)
     {
         app.MapGet("/api/Profile/Profile", async (HttpContext httpContext) =>
             {
@@ -24,12 +26,15 @@ public class ProfileEndpoints
 
                 var profile = await profileRepository.GetProfileById(user.Id);
                 
-                return Results.Ok(new {profile = profile});
+                
+                var profileViewModel = mapper.Map<ProfileDto, ProfileViewModel>(profile);
+                
+                return Results.Ok(profileViewModel);
             })
             .WithOpenApi()
             .RequireAuthorization();
 
-        app.MapPost("/api/auth/ProfileDetails", async (ProfileDetailsViewModel personalDetails, HttpContext httpContext) =>
+        app.MapPost("/api/Profile/ProfileDetails", async (ProfileDetailsViewModel personalDetails, HttpContext httpContext) =>
         {
             var userManager = httpContext.RequestServices.GetRequiredService<UserManager<Profile>>();
             var user = await userManager.GetUserAsync(httpContext.User);
@@ -40,7 +45,7 @@ public class ProfileEndpoints
             using var scope = app.Services.CreateScope();
             var profileRepository = scope.ServiceProvider.GetRequiredService<IProfileRepository>();
 
-            var personalDetailsDto = personalDetails.MapToProfileDetailsDto(user.Id);
+            var personalDetailsDto = mapper.Map<ProfileDetailsDto>(personalDetails);
             
             var response = await profileRepository.AddUserDetailsToDatabase(personalDetailsDto);
 

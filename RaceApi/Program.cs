@@ -112,8 +112,8 @@ if (app.Environment.IsProduction())
 
 AuthEndpoints.Map(app);
 GameEndpoint.Map(app);
-RaceEndpoints.Map(app);
+RaceEndpoints.Map(app, mapper);
 TrackEndpoints.Map(app);
-ProfileEndpoints.Map(app);
+ProfileEndpoints.Map(app, mapper);
 
 app.Run();

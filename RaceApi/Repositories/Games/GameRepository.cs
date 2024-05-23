@@ -22,7 +22,7 @@ public class GameRepository: IGameRepository
     {
         var games = await _db.Game.ToListAsync();
 
-        var gameDtos =  games.Select(game =>
+        var gameDtos = games.Select(game =>
             _mapper.Map<GameDto>(game));
 
         return gameDtos;

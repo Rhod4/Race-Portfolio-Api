@@ -6,7 +6,7 @@ namespace RaceApi.Repositories.Profiles.Interfaces;
 
 public interface IProfileRepository
 {
-    public Task<Profile> GetProfileById(string id);
+    public Task<ProfileDto> GetProfileById(string id);
 
     public Task<ProfileDetailsDto?> AddUserDetailsToDatabase(ProfileDetailsDto profile);
 }

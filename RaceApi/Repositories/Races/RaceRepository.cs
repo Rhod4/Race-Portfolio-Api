@@ -35,14 +35,16 @@ public class RaceRepository: IRaceRepository
         return raceDtos;
     }
 
-    public async Task<Race> GetRace(Guid id)
+    public async Task<RaceDto> GetRace(Guid id)
     {
-        return await _db.Race
+        var race = await _db.Race
             .Include(r => r.Game)
             .Include(r => r.RaceParticipants)
                 .ThenInclude(r => r.Profile)
             .Include(r => r.RaceMarshel)
             .SingleAsync(race => race.Id == id);
+
+        return _mapper.Map<RaceDto>(race);
     }
 
     public async Task AddUserToRaceParticipants(Guid raceId, string userId ,int userRaceNumber, Guid carId)
@@ -74,12 +76,14 @@ public class RaceRepository: IRaceRepository
         return await _db.RaceParticipants.AnyAsync(rp => rp.RaceId == raceId && rp.ProfileId == userId);
     }
 
-    public async Task<IEnumerable<RaceParticipants>> GetRaceParticipants(Guid raceId)
+    public async Task<IEnumerable<RaceParticipantsDto>> GetRaceParticipants(Guid raceId)
     {
-        return await _db.RaceParticipants
+        var raceParticipants = await _db.RaceParticipants
             .Include(rp => rp.Profile)
             .Include(rp => rp.Car)
             .Where(rp => rp.Race.Id == raceId)
             .ToListAsync();
+
+        return raceParticipants.Select(_mapper.Map<RaceParticipantsDto>);
     }
 }

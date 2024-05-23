@@ -6,13 +6,13 @@ public class RaceDto
     public Guid Id { get; set; }
     public string Name { get; set; } = string.Empty;
     public DateTime CreatedOn { get; set; } = DateTime.Now;
-    public Guid? CreatedBy { get; set; }
+    public ProfileDto? CreatedBy { get; set; }
     public DateTime? UpdatedOn { get; set; }
-    public Guid? UpdatedBy { get; set; }
+    public ProfileDto? UpdatedBy { get; set; }
     public DateTime RaceDate { get; set; }
     public bool IsDeleted { get; set; }
     public DateTime? DeletedOn { get; set; }
-    public Guid? DeletedBy { get; set; }
+    public ProfileDto? DeletedBy { get; set; }
 
     public GameDto? Game { get; set; }
     

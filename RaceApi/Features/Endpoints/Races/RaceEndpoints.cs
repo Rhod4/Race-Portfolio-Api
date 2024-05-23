@@ -1,23 +1,25 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Identity;
-using RaceApi.Persistence.Models;
+using RaceApi.Models.ViewModels;
 using RaceApi.Repositories.Races.Interfaces;
+using Profile = RaceApi.Persistence.Models.Profile;
 
 namespace RaceApi.Features.Endpoints.Races;
 
 public abstract class RaceEndpoints
 {
-    public static void Map(WebApplication app)
+    public static void Map(WebApplication app, IMapper mapper)
     {
         app.MapGet("/api/Race/Races/{total:int?}", async (int? total) =>
             {
                 using var scope = app.Services.CreateScope();
                 var raceRepository = scope.ServiceProvider.GetRequiredService<IRaceRepository>();
 
-                var races = await raceRepository.GetRaces(total);
+                var races = (await raceRepository.GetRaces(total)).ToList();
 
+                var racesViewModel = races.Select(mapper.Map<RaceViewModel>);
                 
-                
-                return Results.Ok(new { Success = races });
+                return Results.Ok(racesViewModel);
             })
             .WithOpenApi();
 
@@ -29,8 +31,10 @@ public abstract class RaceEndpoints
                 var raceRepository = scope.ServiceProvider.GetRequiredService<IRaceRepository>();
 
                 var race = await raceRepository.GetRace(raceId);
+                
+                var raceViewModel = mapper.Map<RaceViewModel>(race);
 
-                return Results.Ok(new { race });
+                return Results.Ok(raceViewModel);
             })
             .WithOpenApi()
             .RequireAuthorization();
@@ -121,8 +125,10 @@ public abstract class RaceEndpoints
                 using var scope = app.Services.CreateScope();
                 var raceRepository = scope.ServiceProvider.GetRequiredService<IRaceRepository>();
 
-                var participants = await raceRepository.GetRaceParticipants(raceId);
+                var participants = (await raceRepository.GetRaceParticipants(raceId)).ToList();
 
+                var participantsViewModel = participants.Select(mapper.Map<RaceParticipantsViewModel>);
+                
                 return Results.Ok(new { participants });
             })
             .WithOpenApi();
