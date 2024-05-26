@@ -25,7 +25,7 @@ public class ProfileRepository: IProfileRepository
          return _mapper.Map<ProfileDto>(profile);
     }
 
-    public async Task<ProfileDetailsDto?> AddUserDetailsToDatabase(ProfileDetailsDto profile)
+    public async Task<ProfileDto?> AddUserDetailsToDatabase(ProfileDetailsDto profile)
     {
         
         var profileToUpdate = await _db.Profile.SingleOrDefaultAsync(p => p.Id == profile.UserId);
@@ -37,13 +37,7 @@ public class ProfileRepository: IProfileRepository
             
             await _db.SaveChangesAsync();
             
-            return new ProfileDetailsDto
-            {
-                UserId = profileToUpdate.Id,
-                Firstname = profileToUpdate.Firstname,
-                Lastname = profileToUpdate.Lastname,
-                Email = profileToUpdate.Email!
-            };
+            return _mapper.Map<ProfileDto>(profileToUpdate);
         }
         return null;
     }

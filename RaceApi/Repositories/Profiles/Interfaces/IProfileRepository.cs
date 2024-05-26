@@ -8,5 +8,5 @@ public interface IProfileRepository
 {
     public Task<ProfileDto> GetProfileById(string id);
 
-    public Task<ProfileDetailsDto?> AddUserDetailsToDatabase(ProfileDetailsDto profile);
+    public Task<ProfileDto?> AddUserDetailsToDatabase(ProfileDetailsDto profile);
 }

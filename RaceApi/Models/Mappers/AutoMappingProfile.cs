@@ -53,5 +53,8 @@ public class MappingProfile : Profile
         CreateMap<RaceSeriesViewModel, RaceSeriesDto>();
         CreateMap<CarsViewModel, CarsDto>();
         CreateMap<ProfileViewModel, ProfileDto>();
+        CreateMap<ProfileDetailsViewModel, ProfileDto>()
+            .ForMember(d => d.Firstname, opt => opt.MapFrom(s => s.Firstname))
+            .ForMember(d => d.Lastname, opt => opt.MapFrom(s => s.Lastname));
     }
 }

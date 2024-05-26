@@ -26,8 +26,7 @@ public class ProfileEndpoints
 
                 var profile = await profileRepository.GetProfileById(user.Id);
                 
-                
-                var profileViewModel = mapper.Map<ProfileDto, ProfileViewModel>(profile);
+                var profileViewModel = mapper.Map<ProfileViewModel>(profile);
                 
                 return Results.Ok(profileViewModel);
             })
@@ -45,16 +44,25 @@ public class ProfileEndpoints
             using var scope = app.Services.CreateScope();
             var profileRepository = scope.ServiceProvider.GetRequiredService<IProfileRepository>();
 
-            var personalDetailsDto = mapper.Map<ProfileDetailsDto>(personalDetails);
+            var personalDetailsDto = new ProfileDetailsDto
+            {
+                UserId = user.Id,
+                Firstname = personalDetails.Firstname,
+                Lastname = personalDetails.Lastname
+            };
             
-            var response = await profileRepository.AddUserDetailsToDatabase(personalDetailsDto);
+            var profileDto = await profileRepository.AddUserDetailsToDatabase(personalDetailsDto);
 
-            if (response == null)
+            if (profileDto == null)
             {
                 return Results.BadRequest("Error Updating");
             }
 
-            return Results.Ok("Successfully Updated");
-        });
+            var profileViewModel = mapper.Map<ProfileDto, ProfileViewModel>(profileDto);
+            
+            return Results.Ok(profileViewModel);
+        })
+        .WithOpenApi()
+        .RequireAuthorization();
     }
 }
