@@ -185,9 +185,6 @@ namespace RaceApi.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("RaceType")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
                     b.ToTable("Game");
@@ -212,6 +209,27 @@ namespace RaceApi.Persistence.Migrations
                     b.HasIndex("GameId");
 
                     b.ToTable("GameCars");
+                });
+
+            modelBuilder.Entity("RaceApi.Persistence.Models.GameSeries", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("GameId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("SeriesId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GameId");
+
+                    b.HasIndex("SeriesId");
+
+                    b.ToTable("GameSeries");
                 });
 
             modelBuilder.Entity("RaceApi.Persistence.Models.Location", b =>
@@ -264,12 +282,12 @@ namespace RaceApi.Persistence.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Firstname")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Lastname")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -594,6 +612,25 @@ namespace RaceApi.Persistence.Migrations
                     b.Navigation("Game");
                 });
 
+            modelBuilder.Entity("RaceApi.Persistence.Models.GameSeries", b =>
+                {
+                    b.HasOne("RaceApi.Persistence.Models.Game", "Game")
+                        .WithMany("Series")
+                        .HasForeignKey("GameId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("RaceApi.Persistence.Models.Series", "Series")
+                        .WithMany("Games")
+                        .HasForeignKey("SeriesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Game");
+
+                    b.Navigation("Series");
+                });
+
             modelBuilder.Entity("RaceApi.Persistence.Models.Race", b =>
                 {
                     b.HasOne("RaceApi.Persistence.Models.Profile", "CreatedBy")
@@ -735,6 +772,8 @@ namespace RaceApi.Persistence.Migrations
 
                     b.Navigation("Races");
 
+                    b.Navigation("Series");
+
                     b.Navigation("Tracks");
                 });
 
@@ -767,6 +806,8 @@ namespace RaceApi.Persistence.Migrations
             modelBuilder.Entity("RaceApi.Persistence.Models.Series", b =>
                 {
                     b.Navigation("Cars");
+
+                    b.Navigation("Games");
 
                     b.Navigation("RaceSeries");
                 });

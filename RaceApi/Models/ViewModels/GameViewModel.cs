@@ -8,8 +8,6 @@ public class GameViewModel
     
     public required ICollection<TrackViewModel> Tracks { get; set; }
     public required ICollection<RaceViewModel> Races { get; set; }
-
-    public Guid RaceType { get; set; }
     
     public required ICollection<GameCarsViewModel> Cars { get; set; }
 }

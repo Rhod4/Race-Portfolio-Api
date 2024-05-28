@@ -7,4 +7,5 @@ public class Series
     
     public ICollection<Cars> Cars { get; set; } = null!;
     public ICollection<RaceSeries> RaceSeries { get; set; } = null!;
+    public ICollection<GameSeries> GamesSeries { get; set; } = null!;
 }

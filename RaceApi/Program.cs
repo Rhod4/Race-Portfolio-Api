@@ -7,6 +7,7 @@ using RaceApi.Features.Endpoints.Game;
 using RaceApi.Features.Endpoints.Identity;
 using RaceApi.Features.Endpoints.Profiles;
 using RaceApi.Features.Endpoints.Races;
+using RaceApi.Features.Endpoints.Series;
 using RaceApi.Models.Mappers;
 using RaceApi.Persistence;
 using RaceApi.Repositories.Games;
@@ -17,6 +18,8 @@ using RaceApi.Repositories.Profiles;
 using RaceApi.Repositories.Profiles.Interfaces;
 using RaceApi.Repositories.Races;
 using RaceApi.Repositories.Races.Interfaces;
+using RaceApi.Repositories.Series;
+using RaceApi.Repositories.Series.Interfaces;
 using RaceApi.Repositories.Tracks;
 using RaceApi.Repositories.Tracks.Interfaces;
 using RaceApi.Seeders;
@@ -54,6 +57,7 @@ builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<IRaceRepository, RaceRepository>();
 builder.Services.AddScoped<ITrackRepository, TrackRepository>();
 builder.Services.AddScoped<IGameRepository, GameRepository>();
+builder.Services.AddScoped<ISeriesRepository, SeriesRepository>();
 
 builder.Services.AddControllers();
 
@@ -115,5 +119,7 @@ GameEndpoint.Map(app);
 RaceEndpoints.Map(app, mapper);
 TrackEndpoints.Map(app);
 ProfileEndpoints.Map(app, mapper);
+RaceDashboardEndpoints.Map(app,mapper);
+SeriesEndpoints.Map(app, mapper);
 
 app.Run();

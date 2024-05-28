@@ -3,6 +3,7 @@ using RaceApi.Persistence;
 using RaceApi.Seeders.Cars;
 using RaceApi.Seeders.Game;
 using RaceApi.Seeders.GameCars;
+using RaceApi.Seeders.GameSeries;
 using RaceApi.Seeders.Location;
 using RaceApi.Seeders.Profile;
 using RaceApi.Seeders.Race;
@@ -36,7 +37,6 @@ public class DataSeeder
         {
             await GameSeeder.Seed(_db);
         }
-        var t = await _db.Game.ToListAsync();
         if(!_db.Track.Any())
         {
             await TracksSeeder.Seed(_db);
@@ -65,6 +65,9 @@ public class DataSeeder
         {
             await RaceParticipantsSeeder.Seed(_db);
         }
-        
+        if(!_db.GameSeries.Any())
+        {
+            await GameSeriesSeeder.Seed(_db);
+        }
     }
 }

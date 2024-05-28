@@ -11,4 +11,5 @@ public interface IRaceRepository
     public Task RemoveUserFromRaceParticipants(Guid raceId, string userId); 
     public Task<bool> AlreadyParticipating(Guid raceId, string userId);
     public Task<IEnumerable<RaceParticipantsDto>> GetRaceParticipants(Guid raceId);
+    public Task<IEnumerable<RaceDto>> GetAdminRaceForUser(string userId);
 }

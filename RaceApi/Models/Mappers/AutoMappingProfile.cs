@@ -28,6 +28,7 @@ public class MappingProfile : Profile
         CreateMap<RaceMarshel, RaceMarshelDto>()
             .ForMember(dest => dest.Profile, opt => opt.MapFrom(src => src.Profile));
         CreateMap<RaceSeries, RaceSeriesDto>();
+        CreateMap<Series, SeriesDto>();
         CreateMap<Cars, CarsDto>();
         CreateMap<RaceApi.Persistence.Models.Profile, ProfileDto>();
 
@@ -41,6 +42,7 @@ public class MappingProfile : Profile
         CreateMap<RaceMarshelDto, RaceMarshelViewModel>();
         CreateMap<RaceSeriesDto, RaceSeriesViewModel>();
         CreateMap<CarsDto, CarsViewModel>();
+        CreateMap<SeriesDto, SeriesViewModel>();
         CreateMap<ProfileDto, ProfileViewModel>();
         CreateMap<ProfileDto, ProfileDetailsViewModel>();
 
@@ -52,6 +54,7 @@ public class MappingProfile : Profile
         CreateMap<RaceMarshelViewModel, RaceMarshelDto>();
         CreateMap<RaceSeriesViewModel, RaceSeriesDto>();
         CreateMap<CarsViewModel, CarsDto>();
+        CreateMap<SeriesViewModel, SeriesDto>();
         CreateMap<ProfileViewModel, ProfileDto>();
         CreateMap<ProfileDetailsViewModel, ProfileDto>()
             .ForMember(d => d.Firstname, opt => opt.MapFrom(s => s.Firstname))

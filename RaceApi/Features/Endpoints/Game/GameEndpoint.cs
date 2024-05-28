@@ -14,7 +14,7 @@ public static class GameEndpoint
 
                 var games = await gameRepository.GetGames();
 
-                return Results.Ok(new { Success = games });
+                return Results.Ok( games );
             })
             .WithOpenApi();
     }

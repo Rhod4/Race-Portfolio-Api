@@ -7,8 +7,6 @@ public class GameDto
     
     public required ICollection<TrackDto> Tracks { get; set; }
     public required ICollection<RaceDto> Races { get; set; }
-
-    public Guid RaceType { get; set; }
     
     public required ICollection<GameCarsDto> Cars { get; set; }
 }

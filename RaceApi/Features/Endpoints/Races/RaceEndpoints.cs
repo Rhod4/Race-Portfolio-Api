@@ -6,7 +6,7 @@ using Profile = RaceApi.Persistence.Models.Profile;
 
 namespace RaceApi.Features.Endpoints.Races;
 
-public abstract class RaceEndpoints
+public static class RaceEndpoints
 {
     public static void Map(WebApplication app, IMapper mapper)
     {
@@ -129,8 +129,15 @@ public abstract class RaceEndpoints
 
                 var participantsViewModel = participants.Select(mapper.Map<RaceParticipantsViewModel>);
                 
-                return Results.Ok(new { participants });
+                return Results.Ok(new { participantsViewModel });
             })
             .WithOpenApi();
+
+        app.MapGet("/api/Race/GetRacesForLoggedInUser", async (HttpContext httpContext) =>
+        {
+            var userManager = httpContext.RequestServices.GetRequiredService<UserManager<Profile>>();
+            var user = await userManager.GetUserAsync(httpContext.User);
+            
+        }).WithOpenApi().RequireAuthorization();
     }
 }

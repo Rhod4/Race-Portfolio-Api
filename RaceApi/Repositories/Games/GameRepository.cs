@@ -27,4 +27,16 @@ public class GameRepository: IGameRepository
 
         return gameDtos;
     }
+    
+    public async Task<IEnumerable<GameDto>> GetGamesWithTracks()
+    {
+        var games = await _db.Game
+            .Include(g => g.Tracks)
+            .ToListAsync();
+
+        var gameDtos = games.Select(game =>
+            _mapper.Map<GameDto>(game));
+
+        return gameDtos;
+    }
 }

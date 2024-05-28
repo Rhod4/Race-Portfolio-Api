@@ -18,8 +18,6 @@ public class RaceProjectContext : IdentityDbContext<Profile>
     public DbSet<Role> Role { get; set; }
     public DbSet<Track> Track { get; set; }
     public DbSet<Location> Location { get; set; }
-    
-    public DbSet<RaceSeries> RaceType { get; set; }
     public DbSet<RaceSeries> RaceSeries { get; set; }
     public DbSet<RaceParticipants> RaceParticipants { get; set; }
     public DbSet<RaceMarshel> RaceMarshel { get; set; }
@@ -27,6 +25,7 @@ public class RaceProjectContext : IdentityDbContext<Profile>
     public DbSet<GameCars> GameCars { get; set; }
     public DbSet<Cars> Cars { get; set; }
     public DbSet<Series> Series { get; set; }
+    public DbSet<GameSeries> GameSeries { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

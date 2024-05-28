@@ -86,4 +86,15 @@ public class RaceRepository: IRaceRepository
 
         return raceParticipants.Select(_mapper.Map<RaceParticipantsDto>);
     }
+
+    public async Task<IEnumerable<RaceDto>> GetAdminRaceForUser(string userId)
+    {
+        var adminRaces = await _db.Race
+            .Include(r => r.Game)
+            .Include(r => r.CreatedBy)
+            .Where(r => r.CreatedBy.Id == userId)
+            .ToListAsync();
+        
+        return adminRaces.Select(_mapper.Map<RaceDto>);
+    }
 }
