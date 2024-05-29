@@ -41,4 +41,9 @@ public class SeriesRepository: ISeriesRepository
 
         return series.Select(_mapper.Map<SeriesDto>);
     }
+
+    public async Task<RaceSeriesDto> CreateSeries(SeriesDto series, RaceDto race)
+    {
+        throw new NotImplementedException();
+    }
 }

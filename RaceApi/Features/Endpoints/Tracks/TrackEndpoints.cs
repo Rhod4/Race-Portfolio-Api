@@ -19,14 +19,14 @@ public class TrackEndpoints
             })
             .WithOpenApi();
 
-        app.MapGet("/api/Track/AllTracksByGame", async (Guid game) =>
+        app.MapGet("/api/Track/AllTracksByGame/{game:guid}", async (Guid game) =>
             {
                 using var scope = app.Services.CreateScope();
                 var trackRepository = scope.ServiceProvider.GetRequiredService<ITrackRepository>();
                 
                 var tracks = await trackRepository.GetTracksByGame(game);
 
-                return Results.Ok(new { Success = tracks });
+                return Results.Ok(tracks);
             })
             .WithOpenApi();
         

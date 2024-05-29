@@ -6,4 +6,5 @@ public class CreateRaceRequest
     public DateTime RaceDate { get; set; }
     public Guid GameId { get; set; }
     public Guid TrackId { get; set; }
+    public Guid SeriesId { get; set; }
 }

@@ -44,6 +44,14 @@ public class TrackRepository: ITrackRepository
         return tracks.Select(_mapper.Map<TrackDto>);
     }
 
+    public async Task<TrackDto> GetTrackById(Guid trackId)
+    {
+        var track = await _db.Track
+            .SingleAsync(t => t.Id == trackId);
+
+        return _mapper.Map<TrackDto>(track);
+    }
+
     public async Task<IEnumerable<Track>> GetTracksByCountry(Guid countryId, Guid? gameId)
     {
        return await _db.Track.Where(t => t.Location.Id == countryId && (gameId == null || t.GameId == gameId)).ToListAsync();

@@ -34,6 +34,12 @@ public class MappingProfile : Profile
 
         CreateMap<Location, LocationDto>();
         
+        //Dto to Database model
+        CreateMap<GameDto, Game>();
+        CreateMap<TrackDto, Track>();
+        CreateMap<SeriesDto, Series>();
+        CreateMap<RaceDto, Race>();
+        
         //DTO To ViewModel
         CreateMap<RaceDto, RaceViewModel>();
         CreateMap<GameDto, GameViewModel>();

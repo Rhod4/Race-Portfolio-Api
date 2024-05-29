@@ -39,4 +39,12 @@ public class GameRepository: IGameRepository
 
         return gameDtos;
     }
+
+    public async Task<GameDto> GetGamesById(Guid id)
+    {
+        var game = await _db.Game
+            .SingleAsync(game => game.Id == id);
+        
+        return _mapper.Map<GameDto>(game);
+    }
 }

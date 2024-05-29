@@ -8,6 +8,9 @@ public class Race
     public Guid Id { get; set; }
     public string Name { get; set; } = string.Empty;
     public DateTime CreatedOn { get; set; } = DateTime.Now;
+    
+    [ForeignKey(nameof(Profile))]
+    public Guid ProfileId { get; set; }
     public Profile CreatedBy { get; set; }
     public DateTime? UpdatedOn { get; set; }
     public Profile? UpdatedBy { get; set; }

@@ -1,9 +1,12 @@
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using RaceApi.Models.Dto;
+using RaceApi.Models.Dto.Races;
+using RaceApi.Models.Requests;
 using RaceApi.Persistence;
 using RaceApi.Persistence.Models;
 using RaceApi.Repositories.Races.Interfaces;
+using Profile = RaceApi.Persistence.Models.Profile;
 
 namespace RaceApi.Repositories.Races;
 
@@ -87,7 +90,7 @@ public class RaceRepository: IRaceRepository
         return raceParticipants.Select(_mapper.Map<RaceParticipantsDto>);
     }
 
-    public async Task<IEnumerable<RaceDto>> GetAdminRaceForUser(string userId)
+    public async Task<IEnumerable<RaceDto>> GetRaceForUser(string userId)
     {
         var adminRaces = await _db.Race
             .Include(r => r.Game)
@@ -96,5 +99,31 @@ public class RaceRepository: IRaceRepository
             .ToListAsync();
         
         return adminRaces.Select(_mapper.Map<RaceDto>);
+    }
+
+    public async Task<RaceDto> CreateCompleteRace(CreateRace createRace)
+    {
+        
+        var game = _mapper.Map<Game>(createRace.Game);
+        var track = _mapper.Map<Track>(createRace.Track);
+        
+        
+        var race =
+            new Race
+            {
+                Id = new Guid(),
+                Name = createRace.Name,
+                CreatedOn = createRace.CreatedOn,
+                CreatedBy = createRace.CreatedBy,
+                RaceDate = createRace.RaceDate,
+                GameId = game.Id,
+                TrackId = track.Id,
+            };
+
+        await _db.Race.AddAsync(race);
+
+        await _db.SaveChangesAsync();
+
+        return _mapper.Map<RaceDto>(race);
     }
 }

@@ -11,6 +11,7 @@ public static class SeriesEndpoints
     {
         app.MapGet("/api/Series/GetSeries", async () =>
         {
+            //ToDo
             
         });
         app.MapGet("/api/Series/GetSeriesByGame/{gameId:guid}", async (Guid gameId) =>
