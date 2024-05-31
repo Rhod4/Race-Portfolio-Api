@@ -621,7 +621,7 @@ namespace RaceApi.Persistence.Migrations
                         .IsRequired();
 
                     b.HasOne("RaceApi.Persistence.Models.Series", "Series")
-                        .WithMany("Games")
+                        .WithMany("GamesSeries")
                         .HasForeignKey("SeriesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -807,7 +807,7 @@ namespace RaceApi.Persistence.Migrations
                 {
                     b.Navigation("Cars");
 
-                    b.Navigation("Games");
+                    b.Navigation("GamesSeries");
 
                     b.Navigation("RaceSeries");
                 });

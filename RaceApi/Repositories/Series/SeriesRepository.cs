@@ -42,8 +42,14 @@ public class SeriesRepository: ISeriesRepository
         return series.Select(_mapper.Map<SeriesDto>);
     }
 
-    public async Task<RaceSeriesDto> CreateSeries(SeriesDto series, RaceDto race)
+    public async Task<IEnumerable<SeriesDto>> GetSeriesAndCarsByGame(Guid gameId)
     {
-        throw new NotImplementedException();
+        var series = await _db.Series
+            .Include(s => s.GamesSeries)
+            .Include(s => s.Cars)
+            .Where(s => s.GamesSeries.Any(gs => gs.GameId == gameId))
+            .ToListAsync();
+
+        return series.Select(_mapper.Map<SeriesDto>);
     }
 }

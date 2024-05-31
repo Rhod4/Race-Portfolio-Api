@@ -104,9 +104,6 @@ public class RaceRepository: IRaceRepository
     public async Task<RaceDto> CreateCompleteRace(CreateRace createRace)
     {
         
-        var game = _mapper.Map<Game>(createRace.Game);
-        var track = _mapper.Map<Track>(createRace.Track);
-        
         
         var race =
             new Race
@@ -114,10 +111,10 @@ public class RaceRepository: IRaceRepository
                 Id = new Guid(),
                 Name = createRace.Name,
                 CreatedOn = createRace.CreatedOn,
-                CreatedBy = createRace.CreatedBy,
+                CreatedById = createRace.CreatedBy.Id,
                 RaceDate = createRace.RaceDate,
-                GameId = game.Id,
-                TrackId = track.Id,
+                GameId = createRace.Game.Id,
+                TrackId = createRace.Track.Id,
             };
 
         await _db.Race.AddAsync(race);

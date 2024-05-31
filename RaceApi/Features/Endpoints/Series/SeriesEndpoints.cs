@@ -23,6 +23,16 @@ public static class SeriesEndpoints
 
             return Results.Ok(seriesDtos.Select(mapper.Map<SeriesViewModel>));
         });
+        
+        app.MapGet("/api/Series/GetSeriesAndCarsByGame/{gameId:guid}", async (Guid gameId) =>
+        {
+            using var scope = app.Services.CreateScope();
+            var seriesRepository = scope.ServiceProvider.GetRequiredService<ISeriesRepository>();
+
+            var seriesDtos = await seriesRepository.GetSeriesAndCarsByGame(gameId);
+
+            return Results.Ok(seriesDtos.Select(mapper.Map<SeriesViewModel>));
+        });
 
     }
 }
