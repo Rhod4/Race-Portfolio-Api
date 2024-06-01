@@ -110,7 +110,7 @@ public static class RaceEndpoints
 
                     var isParticipating = await raceRepository.AlreadyParticipating(raceId, user.Id);
 
-                    return Results.Ok(new { isParticipating });
+                    return Results.Ok(isParticipating);
                 }
                 catch (Exception e)
                 {
@@ -129,7 +129,7 @@ public static class RaceEndpoints
 
                 var participantsViewModel = participants.Select(mapper.Map<RaceParticipantsViewModel>);
                 
-                return Results.Ok(new { participantsViewModel });
+                return Results.Ok(participantsViewModel);
             })
             .WithOpenApi();
 
