@@ -42,6 +42,9 @@ public class RaceRepository: IRaceRepository
     {
         var race = await _db.Race
             .Include(r => r.Game)
+            .Include(r => r.RaceSeries)
+                .ThenInclude(r => r.Series)
+            .Include(r => r.Track)
             .Include(r => r.RaceParticipants)
                 .ThenInclude(r => r.Profile)
             .Include(r => r.RaceMarshel)
@@ -101,20 +104,18 @@ public class RaceRepository: IRaceRepository
         return adminRaces.Select(_mapper.Map<RaceDto>);
     }
 
-    public async Task<RaceDto> CreateCompleteRace(CreateRace createRace)
+    public async Task<RaceDto> CreateCompleteRace(CreateOrEditRace createOrEditRace)
     {
-        
-        
         var race =
             new Race
             {
                 Id = new Guid(),
-                Name = createRace.Name,
-                CreatedOn = createRace.CreatedOn,
-                CreatedById = createRace.CreatedBy.Id,
-                RaceDate = createRace.RaceDate,
-                GameId = createRace.Game.Id,
-                TrackId = createRace.Track.Id,
+                Name = createOrEditRace.Name,
+                CreatedOn = createOrEditRace.CreatedOn,
+                CreatedById = createOrEditRace.CreatedBy.Id,
+                RaceDate = createOrEditRace.RaceDate,
+                GameId = createOrEditRace.Game.Id,
+                TrackId = createOrEditRace.Track.Id,
             };
 
         await _db.Race.AddAsync(race);
@@ -122,5 +123,33 @@ public class RaceRepository: IRaceRepository
         await _db.SaveChangesAsync();
 
         return _mapper.Map<RaceDto>(race);
+    }
+    public async Task<RaceDto> UpdateCompleteRace(CreateOrEditRace createOrEditRace)
+    {
+        var raceFromDb = await _db.Race.SingleAsync(race => race.Id == createOrEditRace.Id);
+        
+        raceFromDb.Name = createOrEditRace.Name;
+        raceFromDb.CreatedOn = createOrEditRace.CreatedOn;
+        raceFromDb.CreatedById = createOrEditRace.CreatedBy.Id;
+        raceFromDb.RaceDate = createOrEditRace.RaceDate;
+        raceFromDb.GameId = createOrEditRace.Game.Id;
+        raceFromDb.TrackId = createOrEditRace.Track.Id;
+
+        _db.Race.Update(raceFromDb);
+
+        await _db.SaveChangesAsync();
+
+        return _mapper.Map<RaceDto>(raceFromDb);
+    }
+
+    public async Task<bool> RemoveRace(Guid raceId)
+    {
+        var raceFromDb = await _db.Race.SingleAsync(race => race.Id == raceId);
+
+        _db.Race.Remove(raceFromDb);
+
+        await _db.SaveChangesAsync();
+
+        return true;
     }
 }

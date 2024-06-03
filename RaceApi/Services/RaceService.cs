@@ -13,7 +13,7 @@ using Profile = RaceApi.Persistence.Models.Profile;
 
 namespace RaceApi.Services;
 
-public class CreateRaceService : ICreateRaceService
+public class RaceService : ICreateRaceService
 {
     private IRaceRepository _raceRepository;
     private ISeriesRepository _seriesRepository;
@@ -22,7 +22,7 @@ public class CreateRaceService : ICreateRaceService
     private IMapper _mapper;
     private IRaceSeriesRepository _raceSeriesRepository;
 
-    public CreateRaceService(IRaceRepository raceRepository, ISeriesRepository seriesRepository, 
+    public RaceService(IRaceRepository raceRepository, ISeriesRepository seriesRepository, 
         ITrackRepository trackRepository, IGameRepository gameRepository,
         IMapper mapper, IRaceSeriesRepository raceSeriesRepository)
     {
@@ -42,10 +42,9 @@ public class CreateRaceService : ICreateRaceService
         
         var series = _mapper.Map<Series>(seriesDto);
         
-        
-        var createdRace = new CreateRace
+        var createdRace = new CreateOrEditRace
         {
-            Id = new Guid(),
+            Id = new Guid() ,
             Name = createRaceRequest.Name,
             CreatedOn = DateTime.Now,
             CreatedBy = profile,
@@ -56,8 +55,34 @@ public class CreateRaceService : ICreateRaceService
 
         var race = await _raceRepository.CreateCompleteRace(createdRace);
 
-        var raceSeries = await _raceSeriesRepository.CreateSeries(series, _mapper.Map<Race>(race));
+        await _raceSeriesRepository.CreateSeries(series, _mapper.Map<Race>(race));
+
+        return race;
+    }
+    
+    public async Task<RaceDto> EditCompleteRaceByGame(CreateRaceRequest createRaceRequest, Profile profile)
+    {
+        var gameDto = await _gameRepository.GetGamesById(createRaceRequest.GameId);
+        var trackDto = await _trackRepository.GetTrackById(createRaceRequest.TrackId);
+        var seriesDto = await _seriesRepository.GetSingleSeriesById(createRaceRequest.SeriesId);
         
+        var series = _mapper.Map<Series>(seriesDto);
+        
+        var createdRace = new CreateOrEditRace
+        {
+            Id = Guid.Parse(createRaceRequest.Id!),
+            Name = createRaceRequest.Name,
+            CreatedOn = DateTime.Now,
+            CreatedBy = profile,
+            RaceDate = createRaceRequest.RaceDate,
+            Game = gameDto,
+            Track = trackDto
+        };
+        
+        var race = await _raceRepository.UpdateCompleteRace(createdRace);
+
+        await _raceSeriesRepository.UpdateSeries(series, _mapper.Map<Race>(race));
+
         return race;
     }
 }

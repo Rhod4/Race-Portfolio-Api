@@ -66,7 +66,7 @@ builder.Services.AddScoped<ISeriesRepository, SeriesRepository>();
 builder.Services.AddScoped<IRaceSeriesRepository, RaceSeriesRepository>();
 
 //services
-builder.Services.AddScoped<ICreateRaceService, CreateRaceService>();
+builder.Services.AddScoped<ICreateRaceService, RaceService>();
 
 builder.Services.AddControllers();
 

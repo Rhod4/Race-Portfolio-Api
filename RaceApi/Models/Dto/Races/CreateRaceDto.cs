@@ -2,7 +2,7 @@ using RaceApi.Persistence.Models;
 
 namespace RaceApi.Models.Dto.Races;
 
-public class CreateRace
+public class CreateOrEditRace
 {
     public Guid Id { get; set; }
     public string Name { get; set; } = string.Empty;

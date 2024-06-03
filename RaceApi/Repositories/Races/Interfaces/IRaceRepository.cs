@@ -14,5 +14,7 @@ public interface IRaceRepository
     public Task<bool> AlreadyParticipating(Guid raceId, string userId);
     public Task<IEnumerable<RaceParticipantsDto>> GetRaceParticipants(Guid raceId);
     public Task<IEnumerable<RaceDto>> GetRaceForUser(string userId);
-    public Task<RaceDto> CreateCompleteRace(CreateRace createRaceRequest);
+    public Task<RaceDto> CreateCompleteRace(CreateOrEditRace createOrEditRaceRequest);
+    public Task<RaceDto> UpdateCompleteRace(CreateOrEditRace createOrEditRaceRequest);
+    public Task<bool> RemoveRace(Guid raceId);
 }
