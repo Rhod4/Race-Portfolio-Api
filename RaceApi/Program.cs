@@ -130,5 +130,6 @@ TrackEndpoints.Map(app);
 ProfileEndpoints.Map(app, mapper);
 RaceDashboardEndpoints.Map(app,mapper);
 SeriesEndpoints.Map(app, mapper);
+RaceParticipationEndpoints.Map(app, mapper);
 
 app.Run();

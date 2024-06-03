@@ -23,7 +23,9 @@ public class RaceRepository: IRaceRepository
 
     public async Task<IEnumerable<RaceDto>> GetRaces(int? total)
     {
-        var races = await _db.Race.Include(r => r.Game)
+        var races = await _db.Race
+            .Include(r => r.Game)
+            .Include(r => r.Track)
             .ToListAsync();
 
         
@@ -37,7 +39,30 @@ public class RaceRepository: IRaceRepository
         
         return raceDtos;
     }
+    
+    public async Task<IEnumerable<RaceDto>> GetDetailedRaces(int? total)
+    {
+        var races = await _db.Race
+            .Include(r => r.Game)
+            .Include(r => r.Track)
+            .Include(r => r.RaceSeries)
+                .ThenInclude(r => r.Series)
+            .Include(r => r.RaceMarshel)
+            .Include(r => r.RaceParticipants)
+                .ThenInclude(r => r.Profile)
+            .ToListAsync();
 
+        
+        if (total.HasValue && races.Count > total)
+        {
+            races = races.Take(total.Value).ToList();
+        }
+
+        var raceDtos = races.Select(race =>
+            _mapper.Map<RaceDto>(race));
+        
+        return raceDtos;
+    }
     public async Task<RaceDto> GetRace(Guid id)
     {
         var race = await _db.Race
@@ -45,9 +70,9 @@ public class RaceRepository: IRaceRepository
             .Include(r => r.RaceSeries)
                 .ThenInclude(r => r.Series)
             .Include(r => r.Track)
+            .Include(r => r.RaceMarshel)
             .Include(r => r.RaceParticipants)
                 .ThenInclude(r => r.Profile)
-            .Include(r => r.RaceMarshel)
             .SingleAsync(race => race.Id == id);
 
         return _mapper.Map<RaceDto>(race);
