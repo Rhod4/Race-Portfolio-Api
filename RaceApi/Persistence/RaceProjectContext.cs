@@ -14,13 +14,19 @@ public class RaceProjectContext : IdentityDbContext<Profile>
     public DbSet<Race> Race { get; set; }
     public DbSet<Profile> Profile { get; set; }
     public DbSet<OfficialRoles> OfficialRoles { get; set; }
+    public DbSet<Game> Game { get; set; }
     public DbSet<Role> Role { get; set; }
-    public DbSet<RaceParticipants> RaceParticipants { get; set; }
-    public DbSet<RaceMarshel> RaceMarshel { get; set; }
     public DbSet<Track> Track { get; set; }
     public DbSet<Location> Location { get; set; }
-    public DbSet<Game> Game { get; set; }
-    public DbSet<RaceType> RaceType { get; set; }
+    
+    public DbSet<RaceSeries> RaceType { get; set; }
+    public DbSet<RaceSeries> RaceSeries { get; set; }
+    public DbSet<RaceParticipants> RaceParticipants { get; set; }
+    public DbSet<RaceMarshel> RaceMarshel { get; set; }
+    
+    public DbSet<GameCars> GameCars { get; set; }
+    public DbSet<Cars> Cars { get; set; }
+    public DbSet<Series> Series { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
