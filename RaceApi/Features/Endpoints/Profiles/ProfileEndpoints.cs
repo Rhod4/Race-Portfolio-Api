@@ -8,7 +8,7 @@ using Profile = RaceApi.Persistence.Models.Profile;
 
 namespace RaceApi.Features.Endpoints.Profiles;
 
-public class ProfileEndpoints
+public static class ProfileEndpoints
 {
 
     public static void Map(WebApplication app, IMapper mapper)

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RaceApi.Persistence;
 
@@ -11,9 +12,11 @@ using RaceApi.Persistence;
 namespace RaceApi.Persistence.Migrations
 {
     [DbContext(typeof(RaceProjectContext))]
-    partial class RaceProjectContextModelSnapshot : ModelSnapshot
+    [Migration("20240527205208_RmovedGameTypeFromGameForTimeBeing")]
+    partial class RmovedGameTypeFromGameForTimeBeing
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -209,27 +212,6 @@ namespace RaceApi.Persistence.Migrations
                     b.HasIndex("GameId");
 
                     b.ToTable("GameCars");
-                });
-
-            modelBuilder.Entity("RaceApi.Persistence.Models.GameSeries", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("GameId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("SeriesId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("GameId");
-
-                    b.HasIndex("SeriesId");
-
-                    b.ToTable("GameSeries");
                 });
 
             modelBuilder.Entity("RaceApi.Persistence.Models.Location", b =>
@@ -612,25 +594,6 @@ namespace RaceApi.Persistence.Migrations
                     b.Navigation("Game");
                 });
 
-            modelBuilder.Entity("RaceApi.Persistence.Models.GameSeries", b =>
-                {
-                    b.HasOne("RaceApi.Persistence.Models.Game", "Game")
-                        .WithMany("Series")
-                        .HasForeignKey("GameId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("RaceApi.Persistence.Models.Series", "Series")
-                        .WithMany("GamesSeries")
-                        .HasForeignKey("SeriesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Game");
-
-                    b.Navigation("Series");
-                });
-
             modelBuilder.Entity("RaceApi.Persistence.Models.Race", b =>
                 {
                     b.HasOne("RaceApi.Persistence.Models.Profile", "CreatedBy")
@@ -772,8 +735,6 @@ namespace RaceApi.Persistence.Migrations
 
                     b.Navigation("Races");
 
-                    b.Navigation("Series");
-
                     b.Navigation("Tracks");
                 });
 
@@ -806,8 +767,6 @@ namespace RaceApi.Persistence.Migrations
             modelBuilder.Entity("RaceApi.Persistence.Models.Series", b =>
                 {
                     b.Navigation("Cars");
-
-                    b.Navigation("GamesSeries");
 
                     b.Navigation("RaceSeries");
                 });

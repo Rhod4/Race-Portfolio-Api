@@ -9,8 +9,7 @@ public class Game
     
     public ICollection<Track> Tracks { get; set; }
     public ICollection<Race> Races { get; set; }
-
-    public Guid RaceType { get; set; }
     
     public ICollection<GameCars> Cars { get; set; }
+    public ICollection<GameSeries> Series { get; set; }
 }

@@ -1,4 +1,6 @@
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using RaceApi.Models.Dto;
 using RaceApi.Persistence;
 using RaceApi.Persistence.Models;
 using RaceApi.Repositories.Tracks.Interfaces;
@@ -8,10 +10,12 @@ namespace RaceApi.Repositories.Tracks;
 public class TrackRepository: ITrackRepository
 {
     private readonly RaceProjectContext _db;
+    private IMapper _mapper;
 
-    public TrackRepository(RaceProjectContext db)
+    public TrackRepository(RaceProjectContext db, IMapper mapper)
     {
         _db = db;
+        _mapper = mapper;
     }
     
     public async Task<IEnumerable<Track>> GetTracks()
@@ -33,9 +37,19 @@ public class TrackRepository: ITrackRepository
             .ToListAsync();
     }
 
-    public async Task<IEnumerable<Track>> GetTracksByGame(Guid game)
+    public async Task<IEnumerable<TrackDto>> GetTracksByGame(Guid gameId)
     {
-        throw new NotImplementedException();
+        var tracks = await _db.Track.Where(t => t.GameId == gameId).ToListAsync();
+
+        return tracks.Select(_mapper.Map<TrackDto>);
+    }
+
+    public async Task<TrackDto> GetTrackById(Guid trackId)
+    {
+        var track = await _db.Track
+            .SingleAsync(t => t.Id == trackId);
+
+        return _mapper.Map<TrackDto>(track);
     }
 
     public async Task<IEnumerable<Track>> GetTracksByCountry(Guid countryId, Guid? gameId)

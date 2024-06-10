@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RaceApi.Persistence;
 
@@ -11,9 +12,11 @@ using RaceApi.Persistence;
 namespace RaceApi.Persistence.Migrations
 {
     [DbContext(typeof(RaceProjectContext))]
-    partial class RaceProjectContextModelSnapshot : ModelSnapshot
+    [Migration("20240530190433_FixedNamingForCreatedById")]
+    partial class FixedNamingForCreatedById
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

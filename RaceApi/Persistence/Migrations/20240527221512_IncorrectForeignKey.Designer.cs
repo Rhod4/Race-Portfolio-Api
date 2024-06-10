@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RaceApi.Persistence;
 
@@ -11,9 +12,11 @@ using RaceApi.Persistence;
 namespace RaceApi.Persistence.Migrations
 {
     [DbContext(typeof(RaceProjectContext))]
-    partial class RaceProjectContextModelSnapshot : ModelSnapshot
+    [Migration("20240527221512_IncorrectForeignKey")]
+    partial class IncorrectForeignKey
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -621,7 +624,7 @@ namespace RaceApi.Persistence.Migrations
                         .IsRequired();
 
                     b.HasOne("RaceApi.Persistence.Models.Series", "Series")
-                        .WithMany("GamesSeries")
+                        .WithMany("Games")
                         .HasForeignKey("SeriesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -807,7 +810,7 @@ namespace RaceApi.Persistence.Migrations
                 {
                     b.Navigation("Cars");
 
-                    b.Navigation("GamesSeries");
+                    b.Navigation("Games");
 
                     b.Navigation("RaceSeries");
                 });

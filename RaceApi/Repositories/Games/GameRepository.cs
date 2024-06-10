@@ -27,4 +27,24 @@ public class GameRepository: IGameRepository
 
         return gameDtos;
     }
+    
+    public async Task<IEnumerable<GameDto>> GetGamesWithTracks()
+    {
+        var games = await _db.Game
+            .Include(g => g.Tracks)
+            .ToListAsync();
+
+        var gameDtos = games.Select(game =>
+            _mapper.Map<GameDto>(game));
+
+        return gameDtos;
+    }
+
+    public async Task<GameDto> GetGamesById(Guid id)
+    {
+        var game = await _db.Game
+            .SingleAsync(game => game.Id == id);
+        
+        return _mapper.Map<GameDto>(game);
+    }
 }

@@ -7,6 +7,7 @@ using RaceApi.Features.Endpoints.Game;
 using RaceApi.Features.Endpoints.Identity;
 using RaceApi.Features.Endpoints.Profiles;
 using RaceApi.Features.Endpoints.Races;
+using RaceApi.Features.Endpoints.Series;
 using RaceApi.Models.Mappers;
 using RaceApi.Persistence;
 using RaceApi.Repositories.Games;
@@ -17,9 +18,15 @@ using RaceApi.Repositories.Profiles;
 using RaceApi.Repositories.Profiles.Interfaces;
 using RaceApi.Repositories.Races;
 using RaceApi.Repositories.Races.Interfaces;
+using RaceApi.Repositories.RaceSeries;
+using RaceApi.Repositories.RaceSeries.Interfaces;
+using RaceApi.Repositories.Series;
+using RaceApi.Repositories.Series.Interfaces;
 using RaceApi.Repositories.Tracks;
 using RaceApi.Repositories.Tracks.Interfaces;
 using RaceApi.Seeders;
+using RaceApi.Services;
+using RaceApi.Services.Interfaces;
 using Profile = RaceApi.Persistence.Models.Profile;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -38,7 +45,7 @@ builder.Services.AddCors(options =>
 
 
 builder.Services.AddDbContext<RaceProjectContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("RaceDatabase")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("RaceDatabase")).EnableSensitiveDataLogging());
 
 builder.Services.AddIdentityApiEndpoints<Profile>()
     .AddEntityFrameworkStores<RaceProjectContext>()
@@ -49,11 +56,17 @@ builder.Services.AddIdentityApiEndpoints<Profile>()
 
 builder.Services.AddAuthorization();
 
+//repositories
 builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<IRaceRepository, RaceRepository>();
 builder.Services.AddScoped<ITrackRepository, TrackRepository>();
 builder.Services.AddScoped<IGameRepository, GameRepository>();
+builder.Services.AddScoped<ISeriesRepository, SeriesRepository>();
+builder.Services.AddScoped<IRaceSeriesRepository, RaceSeriesRepository>();
+
+//services
+builder.Services.AddScoped<ICreateRaceService, RaceService>();
 
 builder.Services.AddControllers();
 
@@ -115,5 +128,8 @@ GameEndpoint.Map(app);
 RaceEndpoints.Map(app, mapper);
 TrackEndpoints.Map(app);
 ProfileEndpoints.Map(app, mapper);
+RaceDashboardEndpoints.Map(app,mapper);
+SeriesEndpoints.Map(app, mapper);
+RaceParticipationEndpoints.Map(app, mapper);
 
 app.Run();
