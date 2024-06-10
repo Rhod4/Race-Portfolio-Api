@@ -1,13 +1,14 @@
 using System.Text.Json.Serialization;
+using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using RaceApi.Features.ApiMaps.Profiles;
 using RaceApi.Features.ApiMaps.Tracks;
 using RaceApi.Features.Endpoints.Game;
 using RaceApi.Features.Endpoints.Identity;
+using RaceApi.Features.Endpoints.Profiles;
 using RaceApi.Features.Endpoints.Races;
+using RaceApi.Models.Mappers;
 using RaceApi.Persistence;
-using RaceApi.Persistence.Models;
 using RaceApi.Repositories.Games;
 using RaceApi.Repositories.Games.Interfaces;
 using RaceApi.Repositories.Identity;
@@ -19,6 +20,7 @@ using RaceApi.Repositories.Races.Interfaces;
 using RaceApi.Repositories.Tracks;
 using RaceApi.Repositories.Tracks.Interfaces;
 using RaceApi.Seeders;
+using Profile = RaceApi.Persistence.Models.Profile;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -66,6 +68,14 @@ builder.Services.AddControllersWithViews()
 builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options =>
     options.SerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
+var mapperConfig = new MapperConfiguration(mc =>
+{
+    mc.AddProfile(new MappingProfile());
+});
+
+IMapper mapper = mapperConfig.CreateMapper();
+builder.Services.AddSingleton(mapper);
+
 var app = builder.Build();
 
 app.MapIdentityApi<Profile>();
@@ -102,8 +112,8 @@ if (app.Environment.IsProduction())
 
 AuthEndpoints.Map(app);
 GameEndpoint.Map(app);
-RaceEndpoints.Map(app);
+RaceEndpoints.Map(app, mapper);
 TrackEndpoints.Map(app);
-ProfileEndpoints.Map(app);
+ProfileEndpoints.Map(app, mapper);
 
 app.Run();
