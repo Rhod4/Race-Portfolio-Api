@@ -36,7 +36,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowLocalhost",
         b =>
         {
-            b.WithOrigins("http://localhost:5173") // Replace 'yourPort' with the port your client is running on
+            b.WithOrigins("http://localhost:3000") // Replace 'yourPort' with the port your client is running on
                 .AllowAnyMethod()
                 .AllowAnyHeader()
                 .AllowCredentials();
@@ -49,7 +49,7 @@ builder.Services.AddDbContext<RaceProjectContext>(options =>
 
 builder.Services.AddIdentityApiEndpoints<Profile>()
     .AddEntityFrameworkStores<RaceProjectContext>()
-    .AddDefaultTokenProviders();;
+    .AddDefaultTokenProviders();
 
 
 // Add services to the container.

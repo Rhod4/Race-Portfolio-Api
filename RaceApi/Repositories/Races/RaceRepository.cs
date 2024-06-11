@@ -10,7 +10,7 @@ using Profile = RaceApi.Persistence.Models.Profile;
 
 namespace RaceApi.Repositories.Races;
 
-public class RaceRepository: IRaceRepository
+public class RaceRepository : IRaceRepository
 {
     private readonly RaceProjectContext _db;
     private readonly IMapper _mapper;
@@ -28,7 +28,7 @@ public class RaceRepository: IRaceRepository
             .Include(r => r.Track)
             .ToListAsync();
 
-        
+
         if (total.HasValue && races.Count > total)
         {
             races = races.Take(total.Value).ToList();
@@ -36,23 +36,23 @@ public class RaceRepository: IRaceRepository
 
         var raceDtos = races.Select(race =>
             _mapper.Map<RaceDto>(race));
-        
+
         return raceDtos;
     }
-    
+
     public async Task<IEnumerable<RaceDto>> GetDetailedRaces(int? total)
     {
         var races = await _db.Race
             .Include(r => r.Game)
             .Include(r => r.Track)
             .Include(r => r.RaceSeries)
-                .ThenInclude(r => r.Series)
+            .ThenInclude(r => r.Series)
             .Include(r => r.RaceMarshel)
             .Include(r => r.RaceParticipants)
-                .ThenInclude(r => r.Profile)
+            .ThenInclude(r => r.Profile)
             .ToListAsync();
 
-        
+
         if (total.HasValue && races.Count > total)
         {
             races = races.Take(total.Value).ToList();
@@ -60,28 +60,29 @@ public class RaceRepository: IRaceRepository
 
         var raceDtos = races.Select(race =>
             _mapper.Map<RaceDto>(race));
-        
+
         return raceDtos;
     }
+
     public async Task<RaceDto> GetRace(Guid id)
     {
         var race = await _db.Race
             .Include(r => r.Game)
             .Include(r => r.RaceSeries)
-                .ThenInclude(r => r.Series)
+            .ThenInclude(r => r.Series)
             .Include(r => r.Track)
             .Include(r => r.RaceMarshel)
             .Include(r => r.RaceParticipants)
-                .ThenInclude(r => r.Profile)
+            .ThenInclude(r => r.Profile)
             .SingleAsync(race => race.Id == id);
 
         return _mapper.Map<RaceDto>(race);
     }
 
-    public async Task AddUserToRaceParticipants(Guid raceId, string userId ,int userRaceNumber, Guid carId)
+    public async Task AddUserToRaceParticipants(Guid raceId, string userId, int userRaceNumber, Guid carId)
     {
         var car = await _db.Cars.SingleAsync(car => car.Id == carId);
-        
+
         await _db.RaceParticipants.AddAsync(new RaceParticipants
         {
             RaceId = raceId,
@@ -94,12 +95,12 @@ public class RaceRepository: IRaceRepository
 
     public async Task RemoveUserFromRaceParticipants(Guid raceId, string userId)
     {
-       var participantsToRemove = await _db.RaceParticipants.FirstAsync(participants =>
+        var participantsToRemove = await _db.RaceParticipants.FirstAsync(participants =>
             participants.RaceId == raceId && participants.ProfileId == userId);
-       
-       _db.RaceParticipants.Remove(participantsToRemove);
-       
-       await _db.SaveChangesAsync();
+
+        _db.RaceParticipants.Remove(participantsToRemove);
+
+        await _db.SaveChangesAsync();
     }
 
     public async Task<bool> AlreadyParticipating(Guid raceId, string userId)
@@ -122,10 +123,15 @@ public class RaceRepository: IRaceRepository
     {
         var adminRaces = await _db.Race
             .Include(r => r.Game)
-            .Include(r => r.CreatedBy)
+            .Include(r => r.Track)
+            .Include(r => r.RaceSeries)
+            .ThenInclude(r => r.Series)
+            .Include(r => r.RaceMarshel)
+            .Include(r => r.RaceParticipants)
+            .ThenInclude(r => r.Profile)
             .Where(r => r.CreatedBy.Id == userId)
             .ToListAsync();
-        
+
         return adminRaces.Select(_mapper.Map<RaceDto>);
     }
 
@@ -149,10 +155,11 @@ public class RaceRepository: IRaceRepository
 
         return _mapper.Map<RaceDto>(race);
     }
+
     public async Task<RaceDto> UpdateCompleteRace(CreateOrEditRace createOrEditRace)
     {
         var raceFromDb = await _db.Race.SingleAsync(race => race.Id == createOrEditRace.Id);
-        
+
         raceFromDb.Name = createOrEditRace.Name;
         raceFromDb.CreatedOn = createOrEditRace.CreatedOn;
         raceFromDb.CreatedById = createOrEditRace.CreatedBy.Id;
