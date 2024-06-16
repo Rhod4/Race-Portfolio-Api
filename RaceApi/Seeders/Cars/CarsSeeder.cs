@@ -18,6 +18,12 @@ public static class CarsSeeder
             Name = "Porsche 911 GT3 R",
             SeriesId = Guid.Parse("47ef7bc9-69e4-4614-aac6-5f14ebb7afa1")
         },
+        new Persistence.Models.Cars
+        {
+            Id = Guid.Parse("c7cd0cf1-e711-4d6e-9a6f-ece419d62207"),
+            Name = "Ferrari 499P",
+            SeriesId = Guid.Parse("18FCE74E-21BC-4A27-0E19-08DC7921B9A2")
+        },
     ];
     public static async Task Seed(RaceProjectContext db)
     {

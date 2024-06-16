@@ -12,6 +12,7 @@ public static class SeriesSeeder
         },
         new Persistence.Models.Series
         {
+            Id = Guid.Parse("18FCE74E-21BC-4A27-0E19-08DC7921B9A2"),
             Name = "LMH"
         },
         new Persistence.Models.Series
