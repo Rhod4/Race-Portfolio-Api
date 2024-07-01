@@ -16,9 +16,9 @@ public static class RaceEndpoints
                 using var scope = app.Services.CreateScope();
                 var raceRepository = scope.ServiceProvider.GetRequiredService<IRaceRepository>();
 
-                var races = (await raceRepository.GetRaces(total)).ToList();
+                var races = (await raceRepository.GetDetailedRaces(total)).ToList();
 
-                var racesViewModel = races.Select(mapper.Map<RaceViewModel>);
+                var racesViewModel = races.Select(race => race.MapToRaceCardViewModel(mapper));
 
                 return Results.Ok(racesViewModel);
             })
@@ -57,19 +57,5 @@ public static class RaceEndpoints
             })
             .WithOpenApi()
             .RequireAuthorization();
-
-
-        app.MapGet("/api/Race/RaceCards/{total:int?}", async (int? total) =>
-            {
-                using var scope = app.Services.CreateScope();
-                var raceRepository = scope.ServiceProvider.GetRequiredService<IRaceRepository>();
-
-                var races = (await raceRepository.GetDetailedRaces(total)).ToList();
-
-                var racesViewModel = races.Select(race => race.MapToRaceCardViewModel(mapper));
-
-                return Results.Ok(racesViewModel);
-            })
-            .WithOpenApi();
     }
 }

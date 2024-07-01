@@ -50,6 +50,7 @@ public class RaceRepository : IRaceRepository
             .Include(r => r.RaceMarshel)
             .Include(r => r.RaceParticipants)
             .ThenInclude(r => r.Profile)
+            .OrderBy(r => r.RaceDate)
             .ToListAsync();
 
 
